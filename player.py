@@ -3,7 +3,7 @@ import constants
 
 class Player():
 
-    def __init__(self, deck):
+    def __init__(self, deck, name):
         self.deck = deck
         self.hand = self.get_new_hand()
     
