@@ -7,7 +7,7 @@ class Card():
         self.value = value
         self.suit = suit
     
-    def print_card(self):
+    def show(self):
         print('{} of {}'.format(self.value, self.suit))
 
 class Deck():
