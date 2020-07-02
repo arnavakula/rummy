@@ -5,10 +5,20 @@ class Card():
     
     def __init__(self, value, suit):
         self.value = value
+        self.translated_value = self.get_translated_value()
         self.suit = suit
     
+    def get_translated_value(self):
+        face_cards = {11: 'Jack', 12: 'Queen', 13: 'King'}
+
+        if self.value > 10:
+            return face_cards[self.value]
+        else:
+            return self.value
+
+        
     def show(self):
-        print('{} of {}'.format(self.value, self.suit))
+        print('{} of {}'.format(self.translated_value, self.suit))
 
 class Deck():
 
@@ -32,29 +42,3 @@ class Deck():
     def show(self):
         for c in self.deck:
             c.print_card()
-
-
-class Hand():
-
-    def __init__(self, deck):
-        self.deck = deck
-        self.hand = self.create_hand()
-
-    def create_hand(self):
-        hand = []
-        for i in range(0, constants.HAND_SIZE):
-            hand.append(self.deck[i])
-        for card in hand:
-            self.deck.remove(card)
-
-        return hand
-
-    def add_card_type(self, card):
-        self.hand.append(card)
-    
-    def add_card_attr(self, value, suit):
-        self.hand.append(Card(value, suit))
-    
-    def show(self):
-        for card in self.hand:
-            card.print_card()
