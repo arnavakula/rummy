@@ -3,10 +3,12 @@ import constants
 
 class Player():
 
-    def __init__(self, deck, name):
+    def __init__(self, deck):
         self.deck = deck
+        
         self.hand = self.get_new_hand()
     
+    # hand functions
     def get_new_hand(self):
         hand = []
         for i in range(0, constants.HAND_SIZE):
@@ -22,6 +24,7 @@ class Player():
     def give_card_attr(self, value, suit):
         self.hand.append(Card(value, suit))
         
+    # match checking
     def is_match(self, trio):
         c1, c2, c3 = trio
         if c1.value == c2.value and c2.value == c3.value:
@@ -48,10 +51,6 @@ class Player():
 
         return True if s1 == s2 and s2 == s3 else False
 
-    def print_hand(self):
-        for c in self.hand:
-            c.show()
-
     def count_matches(self):
         comb_count = 0
         match_count = 0
@@ -66,9 +65,42 @@ class Player():
                         self.hand[k].show()
         print(f'count: {match_count}')
 
+    # print for debugging
+    def print_hand(self):
+        for c in self.hand:
+            c.show()
+    
+    # sorting cards
+    def sort_cards(self):
+        #suit and number 
+        #TODO implement multi-criteria checking
+        new_hand = []
+        value_sort = [[], [], [], []]
 
-# deck = Deck()
-# hand = Hand(deck.deck)
-# p1 = Player(hand.hand)
+        for card in self.hand:
+            value_sort[constants.SUITS.index(card.suit)].append(card.value)
 
-# p1.count_matches(deck.deck)
+        for suit in value_sort: 
+            suit.sort()
+            for value in suit: 
+                new_hand.append(Card(value, constants.SUITS[value_sort.index(suit)]))
+            
+        self.hand = new_hand
+        
+        #problem - find what card in hand has a certain value
+        
+
+
+        
+
+
+
+deck = Deck()
+p1 = Player(deck.deck)
+
+p1.print_hand()
+print('------------------------')
+p1.sort_cards()
+
+p1.print_hand()
+
