@@ -5,7 +5,7 @@ class Player():
 
     def __init__(self, deck):
         self.deck = deck
-        
+        self.name = ''
         self.hand = self.get_new_hand()
     
     # hand functions
@@ -95,12 +95,12 @@ class Player():
 
 
 
-deck = Deck()
-p1 = Player(deck.deck)
+# deck = Deck()
+# p1 = Player(deck.deck)
 
-p1.print_hand()
-print('------------------------')
-p1.sort_cards()
+# p1.print_hand()
+# print('------------------------')
+# p1.sort_cards()
 
-p1.print_hand()
+# p1.print_hand()
 

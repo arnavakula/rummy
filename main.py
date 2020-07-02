@@ -1,11 +1,13 @@
 from player import Player
 from cards import Deck, Card
+from game import Game
 
 main_deck = Deck()
-p1 = Player(main_deck.deck, 'Player 1')
+deck = main_deck.deck
 
-p1.print_hand()
-p1.count_matches()
+
+game = Game(deck)
+game.get_player_names()
 
 
 
