@@ -16,6 +16,9 @@ class Card():
         else:
             return self.value
 
+    def get_name(self):
+        return (f'{self.translated_value} of {self.suit}')
+
         
     def show(self):
         print('{} of {}'.format(self.translated_value, self.suit))
@@ -24,6 +27,7 @@ class Deck():
 
     def __init__(self):
         self.deck = self.create_new_deck()
+        self.discard_pile = []
 
     def create_new_deck(self): 
         # create and shuffle 52-card deck, used at init
