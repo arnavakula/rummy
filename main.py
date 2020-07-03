@@ -9,23 +9,30 @@ game.get_player_names()
 
 players = list(game.players)
 
-game.discard(players[0])
+# -- turn sequence --
 
 
-# for player in game.players:
-#     # show current player's hand
-#     game.display_hand(player)
+# show hand
+players[0].print_hand()
 
-#     #display thrown card
-#     print(f'')
+# show top card
+game.display_top_card()
 
-#     # get turn 
-#     turn = game.get_turn()
+# get user move
+move = game.get_move()
 
-#     if turn == 0: # take deck card
-#         pass
-#     else: # take top card
-#         pass
+# handle deck card
+if move == 0:
+    game.handle_turn(players[0], move)
+    print('NEW HAND BELOW')
+    players[0].print_hand()
+    
 
-   
+
+
+    # handle open card
+
+    # discard 
+
+
 

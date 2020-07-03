@@ -9,6 +9,8 @@ class Game():
     def __init__(self, deck):
         #TODO move deck init to here?
         self.deck = deck
+        self.discard_pile = []
+        self.initialize_discard_pile()
         self.players = self.create_players()
 
     def create_players(self):
@@ -39,10 +41,14 @@ class Game():
             name = input(f'Player {i + 1}, enter your name: ')
             self.players[i].name = name
 
-    def get_taken_card(self):
+    def initialize_discard_pile(self):
+        self.discard_pile.append(self.deck[0])
+        self.deck.pop(0)
+
+    def get_move(self):
         possible_moves = {0: 'Select a card from the deck', 1: 'Select thrown card'}
 
-        print('Enter the digit of the move you would like to make')
+        print('Enter the digit of the move you would like to make:')
         for move in possible_moves.keys():
             print(f'{move}: {possible_moves[move]}')
 
@@ -58,6 +64,15 @@ class Game():
                     print(f'{move}: {possible_moves[move]}')
             else:
                 return move
+
+    def handle_turn(self, player, move):
+        if move == 0:
+            player.hand.append(self.deck[0])
+            self.deck.pop(0)
+            self.deck[0].show()
+        # elif move == 1:
+        #     player.hand.append(self.discard_pile[-1])
+        #     self.discard_pile.pop(-1)
 
     def discard(self, player):
         while True:
@@ -75,12 +90,14 @@ class Game():
             else:
                 break
 
-                
+    def display_top_card(self):
+        print(f'Open card: {self.discard_pile[-1].get_name()}.')
 
-        
-
-    def display_hand(self, player):
-        player.print_hand()
+    # testing functions
+    def show(self, cards):
+        for card in cards:
+            card.show()
+    
 
 # static_deck = Deck()
 # p1, p2 = Player(static_deck.deck), Player(static_deck.deck)

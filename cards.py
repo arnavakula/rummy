@@ -19,7 +19,6 @@ class Card():
     def get_name(self):
         return (f'{self.translated_value} of {self.suit}')
 
-        
     def show(self):
         print('{} of {}'.format(self.translated_value, self.suit))
 
@@ -38,10 +37,6 @@ class Deck():
         random.shuffle(deck)
         
         return deck
-
-    def get_top_card(self):
-        self.deck[0].print_card()
-        return self.deck[0]
 
     def show(self):
         for c in self.deck:
