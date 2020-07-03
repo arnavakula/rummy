@@ -11,28 +11,28 @@ players = list(game.players)
 
 # -- turn sequence --
 
+for player in players:
+    print()
+    # show hand
+    player.print_hand()
 
-# show hand
-players[0].print_hand()
+    # sort deck (optional)
+    game.user_sort(player)
 
-# show top card
-game.display_top_card()
+    # show top card
+    game.display_top_card()
 
-# get user move
-move = game.get_move()
+    # get user move
+    move = game.get_move()
 
-# handle deck card
-if move == 0:
-    game.handle_turn(players[0], move)
-    print('NEW HAND BELOW')
-    players[0].print_hand()
-    
+    # handle turn
+    game.handle_turn(player, move)
 
+    # handle discard
+    game.discard(player)
+    print('NEW HAND')
+    game.show(player.hand)
+    print('NEW DISCARD PILE')
+    game.show(game.discard_pile)
 
-
-    # handle open card
-
-    # discard 
-
-
-
+    break

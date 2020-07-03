@@ -67,6 +67,7 @@ class Player():
 
     # print for debugging
     def print_hand(self):
+        print(f'\n{self.name}, this is your hand: ')
         for c in self.hand:
             c.show()
     

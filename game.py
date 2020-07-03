@@ -8,6 +8,7 @@ class Game():
 
     def __init__(self, deck):
         #TODO move deck init to here?
+        self.wants_sorted = False
         self.deck = deck
         self.discard_pile = []
         self.initialize_discard_pile()
@@ -45,8 +46,23 @@ class Game():
         self.discard_pile.append(self.deck[0])
         self.deck.pop(0)
 
+    def user_sort(self, player):
+        while True:
+            try:
+                move = input('Would you like to sort your hand[y/n]? ')
+                if move.lower() != 'y' and move.lower() != 'n':
+                    raise UnsupportedValue()
+            except UnsupportedValue:
+                print('You must enter y or n.')
+            else:
+                if move.lower() == 'y':
+                    self.wants_sorted = True
+                    player.sort_cards()
+                    player.print_hand()
+                break
+            
     def get_move(self):
-        possible_moves = {0: 'Select a card from the deck', 1: 'Select thrown card'}
+        possible_moves = {0: 'Select a card from the deck', 1: 'Select open card'}
 
         print('Enter the digit of the move you would like to make:')
         for move in possible_moves.keys():
@@ -67,12 +83,19 @@ class Game():
 
     def handle_turn(self, player, move):
         if move == 0:
-            player.hand.append(self.deck[0])
+            new_card = self.deck[0]
+            player.hand.append(new_card)
             self.deck.pop(0)
-            self.deck[0].show()
-        # elif move == 1:
-        #     player.hand.append(self.discard_pile[-1])
-        #     self.discard_pile.pop(-1)
+            print(f'\n {player.name}, you got the {new_card.get_name()} from the deck. \n')
+        elif move == 1:
+            self.discard_pile[-1].show()
+            player.hand.append(self.discard_pile[-1])
+            self.discard_pile.pop(-1)
+
+        if self.wants_sorted:
+            player.sort_cards()
+        else:
+            self.user_sort(player)
 
     def discard(self, player):
         while True:
@@ -81,13 +104,14 @@ class Game():
                 for i in range(len(player.hand)):
                     print(f'{i + 1}: {player.hand[i].get_name()}')
                 move = int(input())
-
-                player.hand.pop(move - 1)
             except ValueError:
                 print('Sorry, you must enter an integer.')
             except IndexError:
                 print('Sorry, that number does not correspond to one of the cards.')
             else:
+                self.discard_pile.append(player.hand[move - 1])
+                print(f'\n You discarded the {player.hand[move - 1].get_name()}. \n')
+                player.hand.pop(move - 1)
                 break
 
     def display_top_card(self):
