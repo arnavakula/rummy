@@ -1,5 +1,6 @@
 from cards import Card, Deck
 from player import Player
+import constants
 
 class UnsupportedValue(Exception):
     pass  
@@ -22,7 +23,7 @@ class Game():
             try:
                 num = int(input('Enter the number of players playing: '))
                 # TODO allow for more than two players with multiple decks
-                if num != 2:
+                if num != constants.MAX_PLAYERS:
                     raise UnsupportedValue()
             except ValueError:
                 print('Sorry, you must enter a number.')
@@ -94,7 +95,7 @@ class Game():
             self.deck.pop(0)
             print(f'\n {player.name}, you got the {new_card.get_name()} from the deck. \n')
         elif move == 1:
-            self.discard_pile[-1].show()
+            print(f'\n You took the {self.discard_pile[-1].get_name()}\n')
             player.hand.append(self.discard_pile[-1])
             self.discard_pile.pop(-1)
 
@@ -124,7 +125,7 @@ class Game():
                 break
 
     def display_top_card(self):
-        print(f'Open card: {self.discard_pile[-1].get_name()}.')
+        print(f'Open card: {self.discard_pile[-1].get_name()}. \n')
 
     # testing functions
     def show(self, cards):

@@ -11,7 +11,8 @@ players = list(game.players)
 
 # --- turn sequence ---
 
-for player in players:
+while True:
+    player = players[0]
     print()
     # show hand
     player.print_hand()
@@ -32,9 +33,6 @@ for player in players:
     game.discard(player)
 
     # print matches
-    print(f'{player.name}, you have {player.count_matches()} matches')
+    print(f'{player.name}, you have {player.count_matches()} match(es)')
 
-
-players[0].count_matches()
-players[1].count_matches()
 

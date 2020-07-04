@@ -70,6 +70,7 @@ class Player():
         print(f'\n{self.name}, this is your hand: ')
         for c in self.hand:
             c.show()
+        print()
     
     # sorting cards
     def sort_cards(self):
