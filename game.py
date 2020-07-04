@@ -37,10 +37,16 @@ class Game():
         return players
     
     def get_player_names(self):
-        names = {}
+        names = []
         for i in range(len(self.players)):
-            name = input(f'Player {i + 1}, enter your name: ')
-            self.players[i].name = name
+            while True:
+                name = input(f'Player {i + 1}, enter your name: ')
+                if name in names:
+                    print('Sorry, that name is taken. Please enter another name.')
+                else:
+                    self.players[i].name = name
+                    names.append(name)
+                    break
 
     def initialize_discard_pile(self):
         self.discard_pile.append(self.deck[0])
@@ -104,9 +110,12 @@ class Game():
                 for i in range(len(player.hand)):
                     print(f'{i + 1}: {player.hand[i].get_name()}')
                 move = int(input())
+
+                if move < 1 or move > 10:
+                    raise UnsupportedValue()
             except ValueError:
                 print('Sorry, you must enter an integer.')
-            except IndexError:
+            except UnsupportedValue:
                 print('Sorry, that number does not correspond to one of the cards.')
             else:
                 self.discard_pile.append(player.hand[move - 1])

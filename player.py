@@ -63,7 +63,7 @@ class Player():
                         self.hand[i].show()
                         self.hand[j].show()
                         self.hand[k].show()
-        print(f'count: {match_count}')
+        return match_count
 
     # print for debugging
     def print_hand(self):

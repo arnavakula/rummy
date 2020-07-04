@@ -9,7 +9,7 @@ game.get_player_names()
 
 players = list(game.players)
 
-# -- turn sequence --
+# --- turn sequence ---
 
 for player in players:
     print()
@@ -30,9 +30,11 @@ for player in players:
 
     # handle discard
     game.discard(player)
-    print('NEW HAND')
-    game.show(player.hand)
-    print('NEW DISCARD PILE')
-    game.show(game.discard_pile)
 
-    break
+    # print matches
+    print(f'{player.name}, you have {player.count_matches()} matches')
+
+
+players[0].count_matches()
+players[1].count_matches()
+
