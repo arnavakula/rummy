@@ -5,7 +5,7 @@ import constants
 class UnsupportedValue(Exception):
     pass  
 
-class Game():
+class Game:
 
     def __init__(self, deck):
         #TODO move deck init to here?

@@ -1,7 +1,7 @@
 from cards import *
 import constants
 
-class Player():
+class Player:
 
     def __init__(self, deck):
         self.deck = deck
