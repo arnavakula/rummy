@@ -131,6 +131,8 @@ class Game:
     def show(self, cards):
         for card in cards:
             card.show()
+
+    
     
 
 # static_deck = Deck()

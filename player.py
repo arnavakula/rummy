@@ -1,4 +1,5 @@
 from cards import *
+import math as m
 import constants
 
 class Player:
@@ -64,6 +65,15 @@ class Player:
                         self.hand[j].show()
                         self.hand[k].show()
         return match_count
+    
+    def get_all_matches(self):
+        matches = []
+        for i in range(0, len(self.hand) - 2):
+            for j in range(i + 1, len(self.hand) - 1):
+                for k in range(j + 1, len(self.hand)):
+                    if self.is_match((self.hand[i], self.hand[j], self.hand[k])):
+                        matches.append((self.hand[i], self.hand[j], self.hand[k]))
+        return matches
 
     # print for debugging
     def print_hand(self):
@@ -72,6 +82,18 @@ class Player:
             c.show()
         print()
     
+    def has_duplicates(self, matches):
+        cards = []
+        for match in matches:
+            for card in match:
+                cards.append(card)
+        
+        for card in cards:
+            if cards.count(card) > 1:
+                return True
+        
+        return False
+
     # sorting cards
     def sort_cards(self):
         #suit and number 
@@ -88,21 +110,35 @@ class Player:
                 new_hand.append(Card(value, constants.SUITS[value_sort.index(suit)]))
             
         self.hand = new_hand
+
+    def won_game(self):
+        matches = self.get_all_matches()
+        for i in range(len(matches) - 2): #all but last two
+            # print(i)
+            for j in range(i + 1, len(matches) - 1):
+                # print(j)
+                for k in range(j + 1, len(matches)):
+                    if not self.has_duplicates((matches[i], matches[j], matches[k])):
+                        for c in matches[i]:
+                            c.show()
+                        print()
+                        for c in matches[j]:
+                            c.show()
+                        print()
+                        for c in matches[k]:
+                            c.show()
+                        return True
         
-        #problem - find what card in hand has a certain value
-        
-
-
-        
+        return False       
 
 
 
-# deck = Deck()
-# p1 = Player(deck.deck)
+deck = Deck()
+p1 = Player(deck.deck)
+testing_hand = [Card(7, 'diamonds'), Card(8, 'diamonds'), Card(1, 'spades'), Card(2, 'spades'), Card(8, 'hearts'), Card(8, 'spades'), Card(3, 'spades'), Card(9, 'diamonds'), Card(8, 'clubs')]
+p1.hand = testing_hand
+print(p1.won_game())
 
-# p1.print_hand()
-# print('------------------------')
-# p1.sort_cards()
 
-# p1.print_hand()
+    
 
