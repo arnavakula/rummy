@@ -34,7 +34,7 @@ class Deck():
         for suit in constants.SUITS:
             for value in range(1, 14):
                 deck.append(Card(value, suit))
-        # random.shuffle(deck)
+        random.shuffle(deck)
         
         return deck
 

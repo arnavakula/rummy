@@ -8,31 +8,40 @@ game = Game(deck)
 game.get_player_names()
 
 players = list(game.players)
+game_over = False
 
 # --- turn sequence ---
 
-while True:
-    player = players[0]
-    print()
-    # show hand
-    player.print_hand()
+while not game_over:
+    for player in players:
+        print()
+        # show hand
+        player.print_hand()
 
-    # sort deck (optional)
-    game.user_sort(player)
+        # player.hand = [Card(7, 'diamonds'), Card(8, 'diamonds'), Card(1, 'spades'), Card(2, 'spades'), Card(8, 'hearts'), Card(8, 'spades'), Card(3, 'spades'), Card(9, 'diamonds'), Card(8, 'clubs')]
 
-    # show top card
-    game.display_top_card()
+        # sort deck (optional)
+        game.user_sort(player)
 
-    # get user move
-    move = game.get_move()
+        # show top card
+        game.display_top_card()
 
-    # handle turn
-    game.handle_turn(player, move)
+        # get user move
+        move = game.get_move()
 
-    # handle discard
-    game.discard(player)
+        # handle turn
+        game.handle_turn(player, move)
 
-    # print matches
-    print(f'{player.name}, you have {player.count_matches()} match(es)')
+        # handle discard
+        game.discard(player)
 
+        # print matches
+        print(f'{player.name}, you have {player.count_matches()} match(es)')
+
+        game_over = player.won_game()
+        if(game_over):
+            print(f'{player.name}, you have won! Congratulations!')
+            break
+
+print('game over')
 

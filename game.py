@@ -9,7 +9,6 @@ class Game:
 
     def __init__(self, deck):
         #TODO move deck init to here?
-        self.wants_sorted = False
         self.deck = deck
         self.discard_pile = []
         self.initialize_discard_pile()
@@ -54,20 +53,21 @@ class Game:
         self.deck.pop(0)
 
     def user_sort(self, player):
-        while True:
-            try:
-                move = input('Would you like to sort your hand[y/n]? ')
-                if move.lower() != 'y' and move.lower() != 'n':
-                    raise UnsupportedValue()
-            except UnsupportedValue:
-                print('You must enter y or n.')
-            else:
-                if move.lower() == 'y':
-                    self.wants_sorted = True
-                    player.sort_cards()
-                    player.print_hand()
-                break
-            
+        if not player.sorted:
+            while True:
+                try:
+                    move = input('Would you like to sort your hand[y/n]? ')
+                    if move.lower() != 'y' and move.lower() != 'n':
+                        raise UnsupportedValue()
+                except UnsupportedValue:
+                    print('You must enter y or n.')
+                else:
+                    if move.lower() == 'y' and player.sorted == False:
+                        player.sorted = True
+                        player.sort_cards()
+                        player.print_hand()
+                    break
+                
     def get_move(self):
         possible_moves = {0: 'Select a card from the deck', 1: 'Select open card'}
 
@@ -99,7 +99,7 @@ class Game:
             player.hand.append(self.discard_pile[-1])
             self.discard_pile.pop(-1)
 
-        if self.wants_sorted:
+        if player.sorted:
             player.sort_cards()
         else:
             self.user_sort(player)

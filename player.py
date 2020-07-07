@@ -6,6 +6,7 @@ class Player:
 
     def __init__(self, deck):
         self.deck = deck
+        self.sorted = False
         self.name = ''
         self.hand = self.get_new_hand()
     
@@ -133,11 +134,11 @@ class Player:
 
 
 
-deck = Deck()
-p1 = Player(deck.deck)
-testing_hand = [Card(7, 'diamonds'), Card(8, 'diamonds'), Card(1, 'spades'), Card(2, 'spades'), Card(8, 'hearts'), Card(8, 'spades'), Card(3, 'spades'), Card(9, 'diamonds'), Card(8, 'clubs')]
-p1.hand = testing_hand
-print(p1.won_game())
+# deck = Deck()
+# p1 = Player(deck.deck)
+# testing_hand = [Card(7, 'diamonds'), Card(8, 'diamonds'), Card(1, 'spades'), Card(2, 'spades'), Card(8, 'hearts'), Card(8, 'spades'), Card(3, 'spades'), Card(9, 'diamonds'), Card(8, 'clubs')]
+# p1.hand = testing_hand
+# print(p1.won_game())
 
 
     
