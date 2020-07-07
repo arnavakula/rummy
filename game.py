@@ -95,7 +95,7 @@ class Game:
             self.deck.pop(0)
             print(f'\n {player.name}, you got the {new_card.get_name()} from the deck. \n')
         elif move == 1:
-            print(f'\n You took the {self.discard_pile[-1].get_name()}\n')
+            print(f'\n {player.name}, you took the {self.discard_pile[-1].get_name()}\n')
             player.hand.append(self.discard_pile[-1])
             self.discard_pile.pop(-1)
 

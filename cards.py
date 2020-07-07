@@ -9,9 +9,9 @@ class Card():
         self.suit = suit
     
     def get_translated_value(self):
-        face_cards = {11: 'Jack', 12: 'Queen', 13: 'King'}
+        face_cards = {1: 'Ace', 11: 'Jack', 12: 'Queen', 13: 'King'}
 
-        if self.value > 10:
+        if self.value in face_cards.keys():
             return face_cards[self.value]
         else:
             return self.value
