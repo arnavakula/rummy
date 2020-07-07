@@ -130,10 +130,7 @@ class Game:
     # testing functions
     def show(self, cards):
         for card in cards:
-            card.show()
-
-    
-    
+            card.show()    
 
 # static_deck = Deck()
 # p1, p2 = Player(static_deck.deck), Player(static_deck.deck)

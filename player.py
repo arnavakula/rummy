@@ -8,6 +8,7 @@ class Player:
         self.deck = deck
         self.sorted = False
         self.name = ''
+        self.has_sequence = False
         self.hand = self.get_new_hand()
     
     # hand functions
@@ -32,6 +33,7 @@ class Player:
         if c1.value == c2.value and c2.value == c3.value:
             return True
         elif self.are_consecutive(trio) and self.are_same_suit(trio):
+            self.has_sequence = True
             return True
         else:
             return False
@@ -60,9 +62,6 @@ class Player:
                     comb_count += 1
                     if self.is_match((self.hand[i], self.hand[j], self.hand[k])):
                         match_count += 1
-                        self.hand[i].show()
-                        self.hand[j].show()
-                        self.hand[k].show()
         return match_count
     
     def get_all_matches(self):
