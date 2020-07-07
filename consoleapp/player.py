@@ -1,6 +1,5 @@
-from cards import *
-import math as m
-import constants
+from consoleapp.cards import *
+import consoleapp.constants as constants
 
 class Player:
 
