@@ -1,1 +1,59 @@
 #:kivy 1.11.1
+<LoginScreen>:
+    GridLayout:
+        cols: 1
+        Label:
+            text: "Rummy"
+        GridLayout:
+            cols: 2
+            Label:
+                text: "Open Card"
+            Button:
+                text: "Sort"
+        GridLayout:
+            cols: 2
+            GridLayout:
+                cols: 10
+                Button:
+                    id: c1
+                    text: "C1"
+                Button:
+                    id: c2
+                    text: "C2"
+                Button:
+                    id: c3
+                    text: "C3"
+                Button:
+                    id: c4
+                    text: "C4"
+                Button:
+                    id: c5
+                    text: "C5"
+                Button:
+                    id: c6
+                    text: "C6"
+                Button:
+                    id: c7
+                    text: "C7"
+                Button:
+                    id: c8
+                    text: "C8"
+                Button:
+                    id: c9
+                    text: "C9"
+                Button:
+                    id: c10
+                    text: "C10"
+            Button:
+                text: "Discard"
+        GridLayout:
+            cols: 2
+            Label:
+                text: ""
+            Button:
+                id: discard
+                text: "Discard"
+
+<RootWidget>:
+    LoginScreen:
+        name: "login_screen"
