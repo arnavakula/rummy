@@ -1,13 +1,16 @@
-from kivy.app import App
+import glob
 import os
+
+import cv2
+from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import Screen, ScreenManager
+
 from consoleapp.cards import *
 from consoleapp.game import *
 from consoleapp.player import *
-import cv2, glob
 
 deck = Deck()
 current_player = 1
@@ -21,10 +24,8 @@ class RootWidget(ScreenManager):
 
 class GameScreen(Screen):
     has_clicked = False
-    choose_status = 0
-    # 0 - nothing chosen
-    # 1 - something chosen
     current_player = p1
+
     def get_card_fp(self, index):
         try:
             index = int(index[-1]) - 1
@@ -46,6 +47,24 @@ class GameScreen(Screen):
         self.ids.c8.background_normal = hand[7].get_image_name()
         self.ids.c9.background_normal = hand[8].get_image_name()
 
+        #reset chosen cards
+        self.has_clicked = False
+        for card in self.current_player.hand:
+            card.clicked = False
+        
+        for card in self.current_player.sorted_hand:
+            card.clicked = False
+
+    def create_hls_deck(self):
+        images = glob.glob('card_images//*.png')
+        for fp in images: 
+            img = cv2.imread(fp) 
+            pressed_img = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
+            base = os.path.splitext(fp)[0].split('/')[1]
+            path = f'pressed_card_images//{base}.png'
+            cv2.imwrite(path, pressed_img)
+
+
     def switch_player(self):
         if self.current_player == p1:
             self.current_player = p2
@@ -57,14 +76,6 @@ class GameScreen(Screen):
         self.ids.sort.text = 'Unsort' if self.current_player.sorted else 'Sort'
         self.display_hand()
 
-        images = glob.glob('card_images//*.png')
-        for fp in images: 
-            img = cv2.imread(fp) 
-            pressed_img = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
-            base = os.path.splitext(fp)[0].split('/')[1]
-            path = f'pressed_card_images//{base}.png'
-            cv2.imwrite(path, pressed_img)
-
     def handle_clicked_card(self, button):
         index = int(button.text[-1]) - 1
         hand = self.current_player.sorted_hand if self.current_player.sorted else self.current_player.hand
@@ -73,6 +84,7 @@ class GameScreen(Screen):
             button.background_normal = hand[index].get_image_name()
             hand[index].clicked = False
             self.has_clicked = False
+            self.ids.title.text = f'Selected card: None'
         elif hand[index].clicked and not self.has_clicked:
             print('You clicked a card and it did not register')
         elif not hand[index].clicked and self.has_clicked:
@@ -82,26 +94,27 @@ class GameScreen(Screen):
             button.background_normal = hand[index].get_pressed_image_name()
             self.has_clicked = True
             hand[index].clicked = True
+            self.ids.title.text = f'Selected card: {hand[index].get_name()}'
         elif not hand[index].clicked and not self.has_clicked:
             button.background_normal = hand[index].get_pressed_image_name()
             hand[index].clicked = True
             self.has_clicked = True
+            self.ids.title.text = f'Selected card: {hand[index].get_name()}'
         else:
             print('You should not have gotten here - unconditioned else')
-        
-            
-
 
     def sort_hand(self):
         if self.current_player.sorted: #already sorted
-            print('sorted')
             self.current_player.sorted = False
-            self.display_hand()
             self.ids.sort.text = 'Sort'
         else:
             self.current_player.sorted = True
-            self.display_hand()
             self.ids.sort.text = 'Unsort'
+
+        self.display_hand()
+        self.ids.title.text = f'Selected card: None'
+        
+
 
     def get_open_card(self):
         return f"Open Card: {deck.get_top_card()}"
