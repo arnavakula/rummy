@@ -1,6 +1,6 @@
-from cards import Card, Deck
-from player import Player
-import constants
+from consoleapp.cards import Card, Deck
+from consoleapp.player import Player
+import consoleapp.constants as constants
 
 class UnsupportedValue(Exception):
     pass  

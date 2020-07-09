@@ -1,5 +1,5 @@
 import random
-import constants
+import consoleapp.constants as constants
 
 class Card():
     
@@ -7,6 +7,15 @@ class Card():
         self.value = value
         self.translated_value = self.get_translated_value()
         self.suit = suit
+    
+    def get_image_name(self):
+        suit = self.suit[0].upper()
+        if self.value > 10 or self.value < 2:
+            val = self.translated_value.upper()[0]
+            fp = f'card_images//{val}{suit}.png'
+        else:
+            fp = f'card_images//{self.value}{suit}.png'
+        return fp
     
     def get_translated_value(self):
         face_cards = {1: 'Ace', 11: 'Jack', 12: 'Queen', 13: 'King'}

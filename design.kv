@@ -1,5 +1,5 @@
 #:kivy 1.11.1
-<LoginScreen>:
+<GameScreen>:
     GridLayout:
         cols: 1
         Label:
@@ -17,30 +17,39 @@
                 Button:
                     id: c1
                     text: "C1"
+                    background_normal: root.get_card_fp(root.ids.c1.text)
                 Button:
                     id: c2
                     text: "C2"
+                    background_normal: root.get_card_fp(root.ids.c2.text)
                 Button:
                     id: c3
                     text: "C3"
+                    background_normal: root.get_card_fp(root.ids.c3.text)
                 Button:
                     id: c4
                     text: "C4"
+                    background_normal: root.get_card_fp(root.ids.c4.text)
                 Button:
                     id: c5
                     text: "C5"
+                    background_normal: root.get_card_fp(root.ids.c5.text)
                 Button:
                     id: c6
                     text: "C6"
+                    background_normal: root.get_card_fp(root.ids.c6.text)
                 Button:
                     id: c7
                     text: "C7"
+                    background_normal: root.get_card_fp(root.ids.c7.text)
                 Button:
                     id: c8
                     text: "C8"
+                    background_normal: root.get_card_fp(root.ids.c8.text)
                 Button:
                     id: c9
                     text: "C9"
+                    background_normal: root.get_card_fp(root.ids.c9.text)
                 Button:
                     id: c10
                     text: "C10"
@@ -55,5 +64,5 @@
                 text: "Discard"
 
 <RootWidget>:
-    LoginScreen:
-        name: "login_screen"
+    GameScreen:
+        name: "game_screen"
