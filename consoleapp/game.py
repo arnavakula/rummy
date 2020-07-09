@@ -7,7 +7,7 @@ class UnsupportedValue(Exception):
 
 class Game:
 
-    def __init__(self, deck):
+    def __init__(self, deck, players):
         #TODO move deck init to here?
         self.deck = deck
         self.discard_pile = []

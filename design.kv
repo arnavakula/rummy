@@ -7,9 +7,12 @@
         GridLayout:
             cols: 2
             Label:
-                text: "Open Card"
+                text: root.get_open_card()
             Button:
+                size_hint: 0.4, 0.1
                 text: "Sort"
+                id: sort
+                on_press: root.sort_hand()
         GridLayout:
             cols: 2
             GridLayout:
@@ -54,7 +57,9 @@
                     id: c10
                     text: "C10"
             Button:
-                text: "Discard"
+                id: draw
+                text: "Draw"
+                size_hint: 0.4, 0.1
         GridLayout:
             cols: 2
             Label:
@@ -62,6 +67,7 @@
             Button:
                 id: discard
                 text: "Discard"
+                size_hint: 0.4, 0.1
 
 <RootWidget>:
     GameScreen:

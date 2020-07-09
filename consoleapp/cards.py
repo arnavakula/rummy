@@ -46,6 +46,12 @@ class Deck():
         random.shuffle(deck)
         
         return deck
+    
+    def get_top_card(self):
+        try:
+            return self.discard_pile[0].get_name()
+        except:
+            return 'no card'
 
     def show(self):
         for c in self.deck:

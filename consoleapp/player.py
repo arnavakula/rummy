@@ -3,13 +3,15 @@ import consoleapp.constants as constants
 
 class Player:
 
-    def __init__(self, deck):
-        self.deck = deck
+    def __init__(self, deckobj):
+        self.deckobj = deckobj
+        self.deck = deckobj.deck
         self.sorted = False
         self.name = ''
         self.has_sequence = False
         self.hand = self.get_new_hand()
-    
+        self.sorted_hand = self.sort_cards()
+
     # hand functions
     def get_new_hand(self):
         hand = []
@@ -17,6 +19,9 @@ class Player:
             hand.append(self.deck[i])
         for card in hand:
             self.deck.remove(card)
+        
+        self.deckobj.discard_pile.append(self.deck[0])
+        self.deck.pop(0)
 
         return hand
 
@@ -106,7 +111,7 @@ class Player:
             for value in suit: 
                 new_hand.append(Card(value, constants.SUITS[value_sort.index(suit)]))
             
-        self.hand = new_hand
+        return new_hand
 
     def won_game(self):
         matches = self.get_all_matches()
@@ -129,9 +134,6 @@ class Player:
         return False       
 
 
-
-deck = Deck()
-p1 = Player(deck.deck)
 
 # testing_hand = [Card(7, 'diamonds'), Card(8, 'diamonds'), Card(1, 'spades'), Card(2, 'spades'), Card(8, 'hearts'), Card(8, 'spades'), Card(3, 'spades'), Card(9, 'diamonds'), Card(8, 'clubs')]
 # p1.hand = testing_hand

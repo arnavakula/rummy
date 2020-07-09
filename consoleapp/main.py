@@ -1,5 +1,5 @@
-from cards import Deck, Card
-from game import Game
+from consoleapp.cards import Deck, Card
+from consoleapp.game import Game
 
 main_deck = Deck()
 deck = main_deck.deck
