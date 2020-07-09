@@ -7,6 +7,7 @@ class Card():
         self.value = value
         self.translated_value = self.get_translated_value()
         self.suit = suit
+        self.clicked = False
     
     def get_image_name(self):
         suit = self.suit[0].upper()
@@ -15,6 +16,15 @@ class Card():
             fp = f'card_images//{val}{suit}.png'
         else:
             fp = f'card_images//{self.value}{suit}.png'
+        return fp
+
+    def get_pressed_image_name(self):
+        suit = self.suit[0].upper()
+        if self.value > 10 or self.value < 2:
+            val = self.translated_value.upper()[0]
+            fp = f'pressed_card_images//{val}{suit}.png'
+        else:
+            fp = f'pressed_card_images//{self.value}{suit}.png'
         return fp
     
     def get_translated_value(self):

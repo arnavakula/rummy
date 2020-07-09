@@ -15,45 +15,54 @@
                 id: sort
                 on_press: root.sort_hand()
         GridLayout:
-            cols: 2
+            cols: 3
             GridLayout:
                 cols: 10
                 Button:
                     id: c1
                     text: "C1"
                     background_normal: root.get_card_fp(root.ids.c1.text)
+                    on_press: root.handle_clicked_card(root.ids.c1)
                 Button:
                     id: c2
                     text: "C2"
                     background_normal: root.get_card_fp(root.ids.c2.text)
+                    on_press: root.handle_clicked_card(root.ids.c2)
                 Button:
                     id: c3
                     text: "C3"
                     background_normal: root.get_card_fp(root.ids.c3.text)
+                    on_press: root.handle_clicked_card(root.ids.c3)
                 Button:
                     id: c4
                     text: "C4"
                     background_normal: root.get_card_fp(root.ids.c4.text)
+                    on_press: root.handle_clicked_card(root.ids.c4)
                 Button:
                     id: c5
                     text: "C5"
                     background_normal: root.get_card_fp(root.ids.c5.text)
+                    on_press: root.handle_clicked_card(root.ids.c5)
                 Button:
                     id: c6
                     text: "C6"
                     background_normal: root.get_card_fp(root.ids.c6.text)
+                    on_press: root.handle_clicked_card(root.ids.c6)
                 Button:
                     id: c7
                     text: "C7"
                     background_normal: root.get_card_fp(root.ids.c7.text)
+                    on_press: root.handle_clicked_card(root.ids.c7)
                 Button:
                     id: c8
                     text: "C8"
                     background_normal: root.get_card_fp(root.ids.c8.text)
+                    on_press: root.handle_clicked_card(root.ids.c8)
                 Button:
                     id: c9
                     text: "C9"
                     background_normal: root.get_card_fp(root.ids.c9.text)
+                    on_press: root.handle_clicked_card(root.ids.c9)
                 Button:
                     id: c10
                     text: "C10"
