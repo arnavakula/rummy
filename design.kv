@@ -4,6 +4,7 @@
         cols: 1
         Label:
             text: "Rummy"
+            id: title
         GridLayout:
             cols: 2
             Label:
@@ -62,8 +63,9 @@
                 size_hint: 0.4, 0.1
         GridLayout:
             cols: 2
-            Label:
-                text: ""
+            Button:
+                text: "Switch player"
+                on_press: root.switch_player()
             Button:
                 id: discard
                 text: "Discard"
