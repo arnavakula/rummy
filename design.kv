@@ -69,6 +69,7 @@
             Button:
                 id: draw
                 text: "Draw"
+                on_press: root.go_to_draw_screen()
                 size_hint: 0.4, 0.1
         GridLayout:
             cols: 2
@@ -79,7 +80,29 @@
                 id: discard
                 text: "Discard"
                 size_hint: 0.4, 0.1
+<DrawScreen>:
+    GridLayout:
+        cols: 1
+        GridLayout:
+            cols: 2
+            Button:
+                id: draw_open_card
+                text: ""
+                on_press: root.draw_open_card()
+            Button:
+                id: draw_deck_card
+                text: ""
+                #background_normal: "card_images//gray_back.png"
+                on_press: root.draw_deck_card()
+        GridLayout:
+            cols: 2
+            Label:
+                text: "Draw Open Card"
+            Label:
+                text: "Draw Deck Card"
 
 <RootWidget>:
     GameScreen:
         name: "game_screen"
+    DrawScreen:
+        name: "draw_screen"

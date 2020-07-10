@@ -64,7 +64,6 @@ class GameScreen(Screen):
             path = f'pressed_card_images//{base}.png'
             cv2.imwrite(path, pressed_img)
 
-
     def switch_player(self):
         if self.current_player == p1:
             self.current_player = p2
@@ -113,11 +112,20 @@ class GameScreen(Screen):
 
         self.display_hand()
         self.ids.title.text = f'Selected card: None'
+
+    def go_to_draw_screen(self):
+        self.manager.current = 'draw_screen'
         
-
-
     def get_open_card(self):
         return f"Open Card: {deck.get_top_card()}"
+
+class DrawScreen(Screen):
+    def draw_open_card(self):
+        print('drawing open card')
+    
+    def draw_deck_card(self):
+        print('drawing deck cards')
+
 
 class MainApp(App):
     def build(self):
