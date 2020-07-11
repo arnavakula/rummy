@@ -83,11 +83,13 @@ class GameScreen(Screen):
         index = int(button.text[-1]) - 1
         hand = self.current_player.sorted_hand if self.current_player.sorted else self.current_player.hand
 
+        #TODO simplify this
         if hand[index].clicked and self.has_clicked: 
             button.background_normal = hand[index].get_image_name()
             hand[index].clicked = False
             self.has_clicked = False
             self.ids.title.text = f'Selected card: None'
+            self.handle_card_disable()
         elif hand[index].clicked and not self.has_clicked:
             print('You clicked a card and it did not register')
         elif not hand[index].clicked and self.has_clicked:
@@ -98,13 +100,26 @@ class GameScreen(Screen):
             self.has_clicked = True
             hand[index].clicked = True
             self.ids.title.text = f'Selected card: {hand[index].get_name()}'
+            self.handle_card_disable()
         elif not hand[index].clicked and not self.has_clicked:
             button.background_normal = hand[index].get_pressed_image_name()
             hand[index].clicked = True
             self.has_clicked = True
             self.ids.title.text = f'Selected card: {hand[index].get_name()}'
+            self.handle_card_disable()
         else:
             print('You should not have gotten here - unconditioned else')
+    
+    def handle_card_disable(self):
+        if self.move_status == 0 and self.has_clicked:
+            self.ids.draw.disabled = False
+            self.ids.discard.disabled = True
+        elif self.move_status == 1 and self.has_clicked:
+            self.ids.draw.disabled = True
+            self.ids.discard.disabled = False
+        else:
+            self.ids.draw.disabled = True
+            self.ids.discard.disabled = True
         
 
     def sort_hand(self):
@@ -128,7 +143,7 @@ class GameScreen(Screen):
         return f"Open Card: {deck.get_open_card()}"
     
     def is_disabled(self, text):
-        if (text == 'Draw' and self.move_status == 1) or (text == 'Discard' and self.move_status == 0) or self.move_status == 2:
+        if ((text == 'Draw' and self.move_status == 1) or (text == 'Discard' and self.move_status == 0) or self.move_status == 2):
             return True
         else:
             return False
