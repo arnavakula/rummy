@@ -57,9 +57,9 @@ class Deck():
         
         return deck
     
-    def get_top_card(self):
+    def get_open_card(self):
         try:
-            return self.discard_pile[0].get_name()
+            return self.discard_pile[-1].get_name()
         except:
             return 'no card'
 

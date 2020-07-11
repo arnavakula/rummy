@@ -13,18 +13,22 @@ from consoleapp.game import *
 from consoleapp.player import *
 
 deck = Deck()
-current_player = 1
 p1 = Player(deck)
 p2 = Player(deck)
 players = (p1, p2)
+deck.discard_pile.append(deck.deck[0])
+deck.deck.pop(0)
 
 Builder.load_file('design.kv')
-class RootWidget(ScreenManager):
-    pass
 
 class GameScreen(Screen):
     has_clicked = False
     current_player = p1
+    selected_card = None
+    move_status = 0
+        # 0 - draw (dark discard)
+        # 1 - discard (dark draw)
+        # 2 - wait (dark all)
 
     def get_card_fp(self, index):
         try:
@@ -101,6 +105,7 @@ class GameScreen(Screen):
             self.ids.title.text = f'Selected card: {hand[index].get_name()}'
         else:
             print('You should not have gotten here - unconditioned else')
+        
 
     def sort_hand(self):
         if self.current_player.sorted: #already sorted
@@ -115,17 +120,31 @@ class GameScreen(Screen):
 
     def go_to_draw_screen(self):
         self.manager.current = 'draw_screen'
-        
+    
     def get_open_card(self):
-        return f"Open Card: {deck.get_top_card()}"
+        return deck.get_open_card()
+
+    def display_open_card(self):
+        return f"Open Card: {deck.get_open_card()}"
+    
+    def is_disabled(self, text):
+        if (text == 'Draw' and self.move_status == 1) or (text == 'Discard' and self.move_status == 0) or self.move_status == 2:
+            return True
+        else:
+            return False
 
 class DrawScreen(Screen):
     def draw_open_card(self):
         print('drawing open card')
     
+    def display_open_card_image(self):
+        return deck.discard_pile[-1].get_image_name()
+    
     def draw_deck_card(self):
         print('drawing deck cards')
 
+class RootWidget(ScreenManager):
+    pass
 
 class MainApp(App):
     def build(self):

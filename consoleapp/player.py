@@ -19,7 +19,6 @@ class Player:
         for card in hand:
             self.deck.remove(card)
         
-        self.deckobj.discard_pile.append(self.deck[0])
         self.deck.pop(0)
 
         return hand
