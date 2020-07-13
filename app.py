@@ -14,18 +14,20 @@ from consoleapp.player import *
 
 deck = Deck()
 p1 = Player(deck)
+current_player = p1
 p2 = Player(deck)
 players = (p1, p2)
 deck.discard_pile.append(deck.deck[0])
 deck.deck.pop(0)
+p1.move_status = 0
+p2.move_status = 2
 
 Builder.load_file('design.kv')
 
 class GameScreen(Screen):
     has_clicked = False
-    current_player = p1
     selected_card = None
-    move_status = 0
+    global current_player
         # 0 - draw (dark discard)
         # 1 - discard (dark draw)
         # 2 - wait (dark all)
@@ -39,7 +41,9 @@ class GameScreen(Screen):
             print('Change the id so that the last character is the corresponding index')
 
     def display_hand(self):
-        hand = self.current_player.sorted_hand if self.current_player.sorted else self.current_player.hand
+        hand = current_player.sorted_hand if current_player.sorted else current_player.hand
+        self.ids.c1.id = 'c1'
+        print(type(self.ids.c1.id))
        
         self.ids.c1.background_normal = hand[0].get_image_name()
         self.ids.c2.background_normal = hand[1].get_image_name()
@@ -53,10 +57,10 @@ class GameScreen(Screen):
 
         #reset chosen cards
         self.has_clicked = False
-        for card in self.current_player.hand:
+        for card in current_player.hand:
             card.clicked = False
         
-        for card in self.current_player.sorted_hand:
+        for card in current_player.sorted_hand:
             card.clicked = False
 
     def create_hls_deck(self):
@@ -69,19 +73,21 @@ class GameScreen(Screen):
             cv2.imwrite(path, pressed_img)
 
     def switch_player(self):
-        if self.current_player == p1:
-            self.current_player = p2
+        global current_player
+        if current_player == p1:
+            current_player = p2
             self.ids.title.text = 'Player 2'
         else:
-            self.current_player = p1
+            current_player = p1
             self.ids.title.text = 'Player 1'
 
-        self.ids.sort.text = 'Unsort' if self.current_player.sorted else 'Sort'
+        self.ids.sort.text = 'Unsort' if current_player.sorted else 'Sort'
         self.display_hand()
+        self.handle_card_disable()
 
     def handle_clicked_card(self, button):
         index = int(button.text[-1]) - 1
-        hand = self.current_player.sorted_hand if self.current_player.sorted else self.current_player.hand
+        hand = current_player.sorted_hand if current_player.sorted else current_player.hand
 
         #TODO simplify this
         if hand[index].clicked and self.has_clicked: 
@@ -111,30 +117,36 @@ class GameScreen(Screen):
             print('You should not have gotten here - unconditioned else')
     
     def handle_card_disable(self):
-        if self.move_status == 0 and self.has_clicked:
-            self.ids.draw.disabled = False
+        if current_player.move_status == 0 and not self.has_clicked:
+            self.ids.draw_open_card.disabled = False
+            self.ids.draw_deck_card.disabled = False
             self.ids.discard.disabled = True
-        elif self.move_status == 1 and self.has_clicked:
-            self.ids.draw.disabled = True
+        elif current_player.move_status == 1 and self.has_clicked:
+            self.ids.draw_open_card.disabled = True
+            self.ids.draw_deck_card.disabled = True
             self.ids.discard.disabled = False
         else:
-            self.ids.draw.disabled = True
+            self.ids.draw_open_card.disabled = True
+            self.ids.draw_deck_card.disabled = True
             self.ids.discard.disabled = True
-        
 
     def sort_hand(self):
-        if self.current_player.sorted: #already sorted
-            self.current_player.sorted = False
+        if current_player.sorted: #already sorted
+            current_player.sorted = False
             self.ids.sort.text = 'Sort'
         else:
-            self.current_player.sorted = True
+            current_player.sorted = True
             self.ids.sort.text = 'Unsort'
 
         self.display_hand()
         self.ids.title.text = f'Selected card: None'
 
-    def go_to_draw_screen(self):
-        self.manager.current = 'draw_screen'
+    def draw_deck_screen(self):
+        pass
+
+    def draw_open_card(self):
+        current_player.hand.append(deck.discard_pile[-1])
+        current_player.move_status = 1
     
     def get_open_card(self):
         return deck.get_open_card()
@@ -142,16 +154,27 @@ class GameScreen(Screen):
     def display_open_card(self):
         return f"Open Card: {deck.get_open_card()}"
     
-    def is_disabled(self, text):
-        if ((text == 'Draw' and self.move_status == 1) or (text == 'Discard' and self.move_status == 0) or self.move_status == 2):
-            return True
-        else:
+    def get_init_disable(self, text):
+        if current_player.move_status == 0 and text == 'Draw':
             return False
+        else:
+            return True
+    
+    def reset_screen(self):
+        self.display_hand()
+        for card in current_player.hand:
+            card.clicked = False
+        self.has_clicked = False
+
+        self.handle_card_disable()
 
 class DrawScreen(Screen):
     def draw_open_card(self):
-        print('drawing open card')
-    
+        self.ids.draw_open_card.background_normal = deck.discard_pile[-1].get_image_name()
+        deck.discard_pile.pop(-1)
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'game_screen'
+
     def display_open_card_image(self):
         return deck.discard_pile[-1].get_image_name()
     

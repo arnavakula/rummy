@@ -11,6 +11,7 @@ class Player:
         self.has_sequence = False
         self.hand = self.get_new_hand()
         self.sorted_hand = self.sort_cards()
+        self.move_status = 0
     # hand functions
     def get_new_hand(self):
         hand = []

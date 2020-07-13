@@ -17,7 +17,7 @@
         GridLayout:
             cols: 3
             GridLayout:
-                cols: 10
+                cols: 11
                 Button:
                     id: c1
                     text: "C1"
@@ -66,22 +66,31 @@
                 Button:
                     id: c10
                     text: "C10"
-            Button:
-                id: draw
-                text: "Draw"
-                on_press: root.go_to_draw_screen()
-                size_hint: 0.4, 0.1
-                disabled: True
+                Button:
+                    text: "Switch player"
+                    on_press: root.switch_player()
         GridLayout:
             cols: 2
-            Button:
-                text: "Switch player"
-                on_press: root.switch_player()
+            GridLayout:
+                cols: 2
+                size_hint: 0.7, 0.7
+                Button:
+                    id: draw_open_card
+                    text: "Draw Open Card"
+                    size_hint: 0.5, 0.5
+                    on_press: root.draw_open_card()
+                    disabled: root.get_init_disable("Draw")
+                Button:
+                    id: draw_deck_card
+                    text: "Draw Deck Card"
+                    size_hint: 0.5, 0.5
+                    on_press: root.draw_deck_card()
+                    disabled: root.get_init_disable("Draw")
             Button:
                 id: discard
                 text: "Discard"
                 size_hint: 0.4, 0.1
-                disabled: True
+                disabled: root.get_init_disable(root.ids.discard.text)
 <DrawScreen>:
     GridLayout:
         cols: 1
