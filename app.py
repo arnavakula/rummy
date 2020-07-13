@@ -145,14 +145,22 @@ class GameScreen(Screen):
         self.ids.title.text = f'Selected card: None'
 
     def draw_deck_card(self):
-        pass
+        print(len(deck.deck))
+        new_card = deck.deck[0]
+        current_player.add_card(new_card, deck.deck)
+        print(len(deck.deck))
+        current_player.move_status = 1
+        self.reset_screen()
+        self.highlight_card(new_card)
 
     def draw_open_card(self):
         new_card = deck.discard_pile[-1]
         current_player.add_card(new_card, deck.discard_pile)
         current_player.move_status = 1
         self.reset_screen()
+        self.highlight_card(new_card)
 
+    def highlight_card(self, new_card):
         cid = 0
         if current_player.sorted: 
             for i in range(0, 9):
