@@ -1,5 +1,7 @@
 import glob
 import os
+import time
+from kivy.clock import Clock
 
 import cv2
 from kivy.app import App
@@ -42,11 +44,9 @@ class GameScreen(Screen):
             button.disabled = True
             return ''
 
-    
     def display_hand(self):
         hand = current_player.sorted_hand if current_player.sorted else current_player.hand
         self.ids.c1.id = 'c1'
-        print(type(self.ids.c1.id))
        
         self.ids.c1.background_normal = hand[0].get_image_name()
         self.ids.c2.background_normal = hand[1].get_image_name()
@@ -148,11 +148,27 @@ class GameScreen(Screen):
         pass
 
     def draw_open_card(self):
-        current_player.add_card(deck.discard_pile[-1], deck.discard_pile)
+        new_card = deck.discard_pile[-1]
+        current_player.add_card(new_card, deck.discard_pile)
         current_player.move_status = 1
-        current_player.print_hand()
         self.reset_screen()
+
+        cid = 0
+        if current_player.sorted: 
+            for i in range(0, 9):
+                if current_player.sorted_hand[i].value == new_card.value and current_player.sorted_hand[i].suit == new_card.suit:
+                    cid = 'c' + str(i + 1)
+                    print(cid)
+                    break
+        else:
+            cid = 'c10'
+
+        self.ids[cid].background_normal = new_card.get_pressed_image_name()
+        Clock.schedule_once(lambda dt: self.restore_image(cid, new_card), 2)
     
+    def restore_image(self, cid, card):
+        self.ids[cid].background_normal = card.get_image_name()
+
     def get_open_card(self):
         return deck.get_open_card()
 

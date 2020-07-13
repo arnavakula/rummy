@@ -1,5 +1,6 @@
 from consoleapp.cards import *
 import consoleapp.constants as constants
+import time
 
 class Player:
 
@@ -10,7 +11,7 @@ class Player:
         self.name = ''
         self.has_sequence = False
         self.hand = self.get_new_hand()
-        self.sorted_hand = self.sort_cards()
+        self.sorted_hand = self.sort_cards(self.hand)
         self.move_status = 0
     # hand functions
     def get_new_hand(self):
@@ -96,13 +97,13 @@ class Player:
         return False
 
     # sorting cards
-    def sort_cards(self):
+    def sort_cards(self, hand):
         #suit and number 
         #TODO implement multi-criteria checking
         new_hand = []
         value_sort = [[], [], [], []]
 
-        for card in self.hand:
+        for card in hand:
             value_sort[constants.SUITS.index(card.suit)].append(card.value)
 
         for suit in value_sort: 
@@ -134,12 +135,8 @@ class Player:
 
     def add_card(self, card, pile):
         self.hand.append(card)  
-        self.sorted_hand = self.sort_cards()
-        print('before', len(pile))
+        self.sorted_hand = self.sort_cards(self.hand)
         pile.remove(card)
-        print('after', len(pile))
-
-
 
 # testing_hand = [Card(7, 'diamonds'), Card(8, 'diamonds'), Card(1, 'spades'), Card(2, 'spades'), Card(8, 'hearts'), Card(8, 'spades'), Card(3, 'spades'), Card(9, 'diamonds'), Card(8, 'clubs')]
 # p1.hand = testing_hand
