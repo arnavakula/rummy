@@ -6,9 +6,14 @@
             text: "Rummy"
             id: title
         GridLayout:
-            cols: 2
+            cols: 3
             Label:
-                text: root.get_open_card()
+                text: 'Open Card'
+            Button:
+                text: ''
+                id: open_card_display
+                background_normal: ''
+                on_press: root.click_open_card()
             Button:
                 size_hint: 0.4, 0.1
                 text: "Sort"
@@ -93,6 +98,7 @@
                 text: "Discard"
                 size_hint: 0.4, 0.1
                 disabled: root.get_init_disable(root.ids.discard.text)
+                on_press: root.discard()
 <DrawScreen>:
     GridLayout:
         cols: 1

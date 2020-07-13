@@ -138,10 +138,12 @@ class Player:
         self.sorted_hand = self.sort_cards(self.hand)
         pile.remove(card)
 
-# testing_hand = [Card(7, 'diamonds'), Card(8, 'diamonds'), Card(1, 'spades'), Card(2, 'spades'), Card(8, 'hearts'), Card(8, 'spades'), Card(3, 'spades'), Card(9, 'diamonds'), Card(8, 'clubs')]
-# p1.hand = testing_hand
-# print(p1.won_game())
+    def discard(self, card):
+        for hand in (self.sorted_hand, self.hand):
+            for c in hand:
+                if c.value == card.value and c.suit == card.suit:
+                    hand.remove(c)
+        self.deckobj.discard_pile.append(card)
 
-
-    
+   
 
