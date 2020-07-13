@@ -32,14 +32,17 @@ class GameScreen(Screen):
         # 1 - discard (dark draw)
         # 2 - wait (dark all)
 
-    def get_card_fp(self, index):
-        try:
-            index = int(index[-1]) - 1
+    def get_card_fp(self, button):
+        button.font_size = '0sp'
+        if len(button.text) == 2:
+            index = int(button.text[-1]) - 1
             p1.hand[index].show()
             return p1.hand[index].get_image_name()
-        except:
-            print('Change the id so that the last character is the corresponding index')
+        else: 
+            button.disabled = True
+            return ''
 
+    
     def display_hand(self):
         hand = current_player.sorted_hand if current_player.sorted else current_player.hand
         self.ids.c1.id = 'c1'
@@ -54,6 +57,10 @@ class GameScreen(Screen):
         self.ids.c7.background_normal = hand[6].get_image_name()
         self.ids.c8.background_normal = hand[7].get_image_name()
         self.ids.c9.background_normal = hand[8].get_image_name()
+
+        if current_player.move_status == 1:
+            self.ids.c10.disabled = False
+            self.ids.c10.background_normal = hand[9].get_image_name()
 
         #reset chosen cards
         self.has_clicked = False
@@ -82,8 +89,8 @@ class GameScreen(Screen):
             self.ids.title.text = 'Player 1'
 
         self.ids.sort.text = 'Unsort' if current_player.sorted else 'Sort'
-        self.display_hand()
-        self.handle_card_disable()
+        
+        self.reset_screen()
 
     def handle_clicked_card(self, button):
         index = int(button.text[-1]) - 1
@@ -92,16 +99,12 @@ class GameScreen(Screen):
         #TODO simplify this
         if hand[index].clicked and self.has_clicked: 
             button.background_normal = hand[index].get_image_name()
-            hand[index].clicked = False
-            self.has_clicked = False
+            self.reset_screen()
             self.ids.title.text = f'Selected card: None'
-            self.handle_card_disable()
         elif hand[index].clicked and not self.has_clicked:
             print('You clicked a card and it did not register')
         elif not hand[index].clicked and self.has_clicked:
-            self.display_hand()
-            for card in hand:
-                card.clicked = False
+            self.reset_screen()
             button.background_normal = hand[index].get_pressed_image_name()
             self.has_clicked = True
             hand[index].clicked = True
@@ -138,15 +141,17 @@ class GameScreen(Screen):
             current_player.sorted = True
             self.ids.sort.text = 'Unsort'
 
-        self.display_hand()
+        self.reset_screen()
         self.ids.title.text = f'Selected card: None'
 
-    def draw_deck_screen(self):
+    def draw_deck_card(self):
         pass
 
     def draw_open_card(self):
-        current_player.hand.append(deck.discard_pile[-1])
+        current_player.add_card(deck.discard_pile[-1], deck.discard_pile)
         current_player.move_status = 1
+        current_player.print_hand()
+        self.reset_screen()
     
     def get_open_card(self):
         return deck.get_open_card()

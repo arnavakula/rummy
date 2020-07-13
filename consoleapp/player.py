@@ -130,7 +130,14 @@ class Player:
                             c.show()
                         return True
         
-        return False       
+        return False     
+
+    def add_card(self, card, pile):
+        self.hand.append(card)  
+        self.sorted_hand = self.sort_cards()
+        print('before', len(pile))
+        pile.remove(card)
+        print('after', len(pile))
 
 
 
