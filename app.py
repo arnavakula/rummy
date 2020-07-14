@@ -19,9 +19,7 @@ p1 = Player(deck)
 current_player = p1
 p2 = Player(deck)
 players = (p1, p2)
-deck.discard_pile.append(deck.deck[0])
 
-deck.deck.pop(0)
 p1.move_status = 0
 p2.move_status = 2
 
@@ -38,7 +36,6 @@ class GameScreen(Screen):
 
     def get_card_fp(self, button):
         button.font_size = '0sp'
-        self.ids.open_card_display.background_color = (0, 0, 0, 1)
         if len(button.text) == 2:
             index = int(button.text[-1]) - 1
             p1.hand[index].show()
@@ -145,10 +142,8 @@ class GameScreen(Screen):
         self.ids.title.text = f'Selected card: None'
 
     def draw_deck_card(self):
-        print(len(deck.deck))
         new_card = deck.deck[0]
         current_player.add_card(new_card, deck.deck)
-        print(len(deck.deck))
         current_player.move_status = 1
         self.reset_screen()
         self.highlight_card(new_card)
@@ -167,7 +162,6 @@ class GameScreen(Screen):
                 for i in range(0, 9):
                     if current_player.sorted_hand[i].value == new_card.value and current_player.sorted_hand[i].suit == new_card.suit:
                         cid = 'c' + str(i + 1)
-                        print(cid)
                         break
             else:
                 cid = 'c10'
@@ -211,19 +205,26 @@ class GameScreen(Screen):
     def discard(self):
         current_player.discard(self.selected_card)
         self.selected_card = None
-        current_player.print_hand()
         current_player.move_status = 0
         self.reset_screen()
     
     def display_open_card(self):
         try:
             self.ids.open_card_display.background_normal = deck.discard_pile[-1].get_image_name()
+            self.ids.open_card_display.disabled = False
+            self.ids.open_card_display.text = ''
         except:
             self.ids.open_card_display.background_normal = ''
-            self.ids.open_card_display.text = 'none'
-            print(dir(self.ids.open_card_display))
-            print('NO OPEN CARD')
-        
+            self.ids.open_card_display.disabled = True
+            self.ids.open_card_display.color =  (1, 1, 1, 1)
+            self.ids.open_card_display.text = 'None (discard pile is empty)'
+
+    def initialize_discard(self):
+        deck.discard_pile.append(deck.deck[0])
+        deck.deck.pop(0)
+        print('*', deck.discard_pile[-1].get_image_name())
+        return deck.discard_pile[-1].get_image_name()
+
     def click_open_card(self):
         pass
 class DrawScreen(Screen):
