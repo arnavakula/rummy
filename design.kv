@@ -99,31 +99,6 @@
                 size_hint: 0.4, 0.1
                 disabled: root.get_init_disable(root.ids.discard.text)
                 on_press: root.discard()
-<DrawScreen>:
-    GridLayout:
-        cols: 1
-        GridLayout:
-            cols: 2
-            Button:
-                id: draw_open_card
-                text: ""
-                background_normal: root.display_open_card_image()
-                on_press: root.draw_open_card()
-            Button:
-                id: draw_deck_card
-                text: ""
-                background_normal: "card_images//gray_back.png"
-                on_press: root.draw_deck_card()
-        GridLayout:
-            cols: 2
-            size_hint: 0.5, 0.2
-            Label:
-                text: "Draw Open Card"
-            Label:
-                text: "Draw Deck Card"
-
 <RootWidget>:
     GameScreen:
         name: "game_screen"
-    DrawScreen:
-        name: "draw_screen"

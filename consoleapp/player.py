@@ -13,7 +13,7 @@ class Player:
         self.hand = self.get_new_hand()
         self.sorted_hand = self.sort_cards(self.hand)
         self.move_status = 0
-    # hand functions
+
     def get_new_hand(self):
         hand = []
         for i in range(0, constants.HAND_SIZE):
@@ -31,7 +31,6 @@ class Player:
     def give_card_attr(self, value, suit):
         self.hand.append(Card(value, suit))
         
-    # match checking
     def is_match(self, trio):
         c1, c2, c3 = trio
         if c1.value == c2.value and c2.value == c3.value:
