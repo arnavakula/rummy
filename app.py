@@ -11,10 +11,13 @@ from kivy.uix.image import Image
 from kivy.uix.screenmanager import Screen, ScreenManager
 
 from consoleapp.cards import *
-from consoleapp.game import *
+import consoleapp.game as game
 from consoleapp.player import *
 
 Builder.load_file('design.kv')
+
+class PlayerSelectScreen(Screen):
+    pass
 
 class GameScreen(Screen):
     deckobj = Deck()
@@ -154,7 +157,6 @@ class GameScreen(Screen):
                 if c.value == new_card.value and c.suit == new_card.suit:
                     j = self.current_player.sorted_hand.index(c) + 1
                     cid = f'c{j}'
-        print('cid:{}'.format(cid))
 
         self.ids[cid].background_normal = new_card.get_pressed_image_name()
         self.highlighting_card = True
@@ -192,6 +194,7 @@ class GameScreen(Screen):
         self.current_player.discard(self.selected_card)
         self.selected_card = None
         self.current_player.move_status = 2
+        print('Has the player won: {}'.format(self.current_player.won_game()))
         try:
             self.players[self.players.index(self.current_player) + 1].move_status = 0
         except IndexError:

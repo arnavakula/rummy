@@ -1,4 +1,6 @@
 #:kivy 1.11.1
+# <PlayerSelectScreen>:
+
 <GameScreen>:
     GridLayout:
         cols: 1
@@ -100,5 +102,7 @@
                 disabled: root.get_init_disable(root.ids.discard.text)
                 on_press: root.discard()
 <RootWidget>:
+    # PlayerSelectScreen:
+    #     name: "player_select_screen"
     GameScreen:
         name: "game_screen"
