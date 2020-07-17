@@ -66,3 +66,6 @@ class Deck():
     def show(self):
         for c in self.deck:
             c.print_card()
+        
+    def refresh_deck(self):
+        self.discard_pile[1:-1]

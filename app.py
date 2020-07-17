@@ -1,34 +1,37 @@
 import glob
 import os
 import time
-from kivy.clock import Clock
 
 import cv2
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.app import App
 
-from consoleapp.cards import *
 import consoleapp.game as game
+from consoleapp.cards import *
 from consoleapp.player import *
 
 Builder.load_file('design.kv')
+winning_player = None
 
 class PlayerSelectScreen(Screen):
     pass
 
 class GameScreen(Screen):
     deckobj = Deck()
-    p1, p2 = Player(deckobj), Player(deckobj)
+    p1, p2, p3 = Player(deckobj), Player(deckobj), Player(deckobj)
     has_clicked = False
     selected_card = None
     highlighting_card = False
     current_player = p1
     p1.move_status = 0
     p2.move_status = 2
-    players = (p1, p2)
+    p3.move_status = 2
+    players = (p1, p2, p3)
 
     def get_card_fp(self, button):
         button.font_size = '0sp'
@@ -42,17 +45,10 @@ class GameScreen(Screen):
 
     def display_hand(self):
         hand = self.get_current_hand()
-        self.ids.c1.id = 'c1'
        
-        self.ids.c1.background_normal = hand[0].get_image_name()
-        self.ids.c2.background_normal = hand[1].get_image_name()
-        self.ids.c3.background_normal = hand[2].get_image_name()
-        self.ids.c4.background_normal = hand[3].get_image_name()
-        self.ids.c5.background_normal = hand[4].get_image_name()
-        self.ids.c6.background_normal = hand[5].get_image_name()
-        self.ids.c7.background_normal = hand[6].get_image_name()
-        self.ids.c8.background_normal = hand[7].get_image_name()
-        self.ids.c9.background_normal = hand[8].get_image_name()
+        for i in range(0, 9):
+            cid = f'c{i + 1}'
+            self.ids[cid].background_normal = hand[i].get_image_name()
 
         if self.current_player.move_status == 1 and len(self.get_current_hand()) > 9:
             self.ids.c10.disabled = False
@@ -63,11 +59,9 @@ class GameScreen(Screen):
 
         #reset chosen cards
         self.has_clicked = False
-        for card in self.current_player.hand:
-            card.clicked = False
-        
-        for card in self.current_player.sorted_hand:
-            card.clicked = False
+        for hand in (self.current_player.sorted_hand, self.current_player.hand):
+            for card in hand:
+                card.clicked = False
 
     def create_hls_deck(self):
         images = glob.glob('card_images//*.png')
@@ -79,15 +73,12 @@ class GameScreen(Screen):
             cv2.imwrite(path, pressed_img)
 
     def switch_player(self):
-        if self.current_player == self.p1:
-            self.current_player = self.p2
-            self.ids.title.text = 'Player 2'
-        else:
-            self.current_player = self.p1
-            self.ids.title.text = 'Player 1'
+        try:
+            self.current_player = self.players[self.players.index(self.current_player) + 1]
+        except IndexError:
+            self.current_player = self.players[0]
 
         self.ids.sort.text = 'Unsort' if self.current_player.sorted else 'Sort'
-        
         self.reset_screen()
 
     def handle_clicked_card(self, button):
@@ -160,7 +151,7 @@ class GameScreen(Screen):
 
         self.ids[cid].background_normal = new_card.get_pressed_image_name()
         self.highlighting_card = True
-        Clock.schedule_once(lambda dt: self.restore_image(cid, new_card), 2)
+        Clock.schedule_once(lambda dt: self.restore_image(cid, new_card), 1)
     
     def restore_image(self, cid, card):
         self.ids[cid].background_normal = card.get_image_name()
@@ -194,14 +185,17 @@ class GameScreen(Screen):
         self.current_player.discard(self.selected_card)
         self.selected_card = None
         self.current_player.move_status = 2
-        print('Has the player won: {}'.format(self.current_player.won_game()))
         try:
             self.players[self.players.index(self.current_player) + 1].move_status = 0
         except IndexError:
             self.players[0].move_status = 0
         finally:
+            global winning_player 
+            winning_player = self.current_player
             self.reset_screen()
-    
+            self.ids.player_win_screen_text.text = f'Congratulations{self.current_player.name}, you have won the game!'
+            self.manager.current = 'player_win_screen'
+
     def display_open_card(self):
         try:
             self.ids.open_card_display.background_normal = self.deckobj.discard_pile[-1].get_image_name()
@@ -220,6 +214,15 @@ class GameScreen(Screen):
 
     def click_open_card(self):
         pass
+
+class PlayerWinScreen(Screen):
+    def get_winning_message(self):
+        global winning_player
+        print(type(winning_player))
+        return 'Congratulations, you won the game!'
+
+    def exit_app(self):
+        App.get_running_app().stop()
 
 class RootWidget(ScreenManager):
     pass

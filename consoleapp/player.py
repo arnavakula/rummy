@@ -8,7 +8,7 @@ class Player:
         self.deckobj = deckobj
         self.deck = deckobj.deck
         self.sorted = False
-        self.name = ''
+        self.name = 'winner'
         self.has_sequence = False
         self.hand = self.get_new_hand()
         self.sorted_hand = self.sort_cards(self.hand)

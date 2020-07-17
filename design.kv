@@ -101,8 +101,29 @@
                 size_hint: 0.4, 0.1
                 disabled: root.get_init_disable(root.ids.discard.text)
                 on_press: root.discard()
+
+<PlayerWinScreen>:
+    GridLayout:
+        cols: 1
+        Label:
+            id: player_win_screen_text
+            text: ""
+        GridLayout:
+            size_hint: 0.3, 0.3
+            cols: 3
+            Label:
+                text: ""
+            Button:
+                size_hint: .6, .2
+                on_press: root.exit_app()
+                text: "Close App"
+            Label: 
+                text: ""
+
 <RootWidget>:
     # PlayerSelectScreen:
     #     name: "player_select_screen"
     GameScreen:
         name: "game_screen"
+    PlayerWinScreen:
+        name: "player_win_screen"
