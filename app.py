@@ -215,6 +215,7 @@ class GameScreen(Screen):
     def click_open_card(self):
         pass
 
+
 class PlayerWinScreen(Screen):
     def get_winning_message(self):
         global winning_player
@@ -231,5 +232,6 @@ class MainApp(App):
     def build(self):
         return RootWidget()
 
+# run the app
 if __name__== '__main__':
     MainApp().run()   
