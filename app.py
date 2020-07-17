@@ -192,9 +192,9 @@ class GameScreen(Screen):
         finally:
             global winning_player 
             winning_player = self.current_player
+            self.deckobj.refresh_deck()
             self.reset_screen()
-            self.ids.player_win_screen_text.text = f'Congratulations{self.current_player.name}, you have won the game!'
-            self.manager.current = 'player_win_screen'
+            # self.manager.current = 'player_win_screen'
 
     def display_open_card(self):
         try:

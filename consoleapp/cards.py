@@ -68,4 +68,10 @@ class Deck():
             c.print_card()
         
     def refresh_deck(self):
-        self.discard_pile[1:-1]
+        new_cards = self.discard_pile[1:]
+        del self.discard_pile[1:]
+        print(len(self.deck))
+        self.deck += new_cards
+        print(len(self.deck))
+
+
