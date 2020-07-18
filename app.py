@@ -1,6 +1,7 @@
 import glob
 import os
-import time
+import time,sys
+print(sys.version_info)
 
 import cv2
 from kivy.app import App
@@ -39,20 +40,20 @@ class GameScreen(Screen):
             index = int(button.text[-1]) - 1
             self.current_player.hand[index].show()
             return self.current_player.hand[index].get_image_name()
-        else: 
+        else:
             button.disabled = True
             return ''
 
     def display_hand(self):
         hand = self.get_current_hand()
-       
+
         for i in range(0, 9):
             cid = f'c{i + 1}'
             self.ids[cid].background_normal = hand[i].get_image_name()
 
         if self.current_player.move_status == 1 and len(self.get_current_hand()) > 9:
             self.ids.c10.disabled = False
-            self.ids.c10.background_normal = hand[9].get_image_name()   
+            self.ids.c10.background_normal = hand[9].get_image_name()
         else:
             self.ids.c10.disabled = True
             self.ids.c10.background_normal = ''
@@ -65,8 +66,8 @@ class GameScreen(Screen):
 
     def create_hls_deck(self):
         images = glob.glob('card_images//*.png')
-        for fp in images: 
-            img = cv2.imread(fp) 
+        for fp in images:
+            img = cv2.imread(fp)
             pressed_img = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
             base = os.path.splitext(fp)[0].split('/')[1]
             path = f'pressed_card_images//{base}.png'
@@ -86,7 +87,7 @@ class GameScreen(Screen):
             index = int(button.text[-1]) - 1
             hand = self.get_current_hand()
 
-            if hand[index].clicked and self.has_clicked: 
+            if hand[index].clicked and self.has_clicked:
                 button.background_normal = hand[index].get_image_name()
                 self.reset_screen()
                 self.ids.title.text = f'Selected card: None'
@@ -152,7 +153,7 @@ class GameScreen(Screen):
         self.ids[cid].background_normal = new_card.get_pressed_image_name()
         self.highlighting_card = True
         Clock.schedule_once(lambda dt: self.restore_image(cid, new_card), 1)
-    
+
     def restore_image(self, cid, card):
         self.ids[cid].background_normal = card.get_image_name()
         self.highlighting_card = False
@@ -162,13 +163,13 @@ class GameScreen(Screen):
 
     def display_open_card(self):
         return f"Open Card: {self.deckobj.get_open_card()}"
-    
+
     def get_init_disable(self, text):
         if self.current_player.move_status == 0 and text == 'Draw':
             return False
         else:
             return True
-    
+
     def reset_screen(self):
         self.display_hand()
         for card in self.current_player.hand:
@@ -190,7 +191,7 @@ class GameScreen(Screen):
         except IndexError:
             self.players[0].move_status = 0
         finally:
-            global winning_player 
+            global winning_player
             winning_player = self.current_player
             self.deckobj.refresh_deck()
             self.reset_screen()
@@ -234,4 +235,4 @@ class MainApp(App):
 
 # run the app
 if __name__== '__main__':
-    MainApp().run()   
+    MainApp().run()
