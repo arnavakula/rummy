@@ -4,7 +4,6 @@ from _thread import *
 
 host = 'localhost'
 port = 5555
-
 lst = []
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -17,19 +16,17 @@ s.listen()
 def threaded_client(conn):
     while True:
         try:
-            data = pickle.loads(conn.recv(2048))
+            value, suit = pickle.loads(conn.recv(2048))
 
             if not data:
+                print('No connection')
                 break
             else:
                 print('Received: {}'.format(data))
-                lst.append(data)
-                conn.send(pickle.dumps(lst))
         except:
-            break
-
             print('Lost connection')
             conn.close()
+            break
 
 #TODO implement some condition
 while True:

@@ -10,4 +10,7 @@ s.connect((host, port))
 
 d = {1: 'how', 2: 'are', 3: 'you'}
 s.send(pickle.dumps(d))
-print(pickle.loads(s.recv(2048)))
+
+while True:
+    msg = pickle.loads(s.recv(2048))
+    print(msg)

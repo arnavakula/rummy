@@ -11,4 +11,10 @@ s.connect((host, port))
 
 d = {1: 'hi', 2: 'there'}
 s.send(pickle.dumps(d))
-print(pickle.loads(s.recv(2048)))
+
+while True:
+    data = pickle.loads(s.recv(2048))
+    print('Received: {}'.format(data))
+    lst.append(data)
+
+print(lst)

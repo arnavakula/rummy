@@ -1,7 +1,8 @@
 import glob
 import os
-import time,sys
-print(sys.version_info)
+import time
+from network import Network
+import pickle
 
 import cv2
 from kivy.app import App
@@ -18,6 +19,7 @@ from consoleapp.player import *
 
 Builder.load_file('design.kv')
 winning_player = None
+net = Network()
 
 class PlayerSelectScreen(Screen):
     pass
@@ -183,6 +185,7 @@ class GameScreen(Screen):
         return self.current_player.sorted_hand if self.current_player.sorted else self.current_player.hand
 
     def discard(self):
+        net.send((self.selected_card.value, self.selected_card.suit))
         self.current_player.discard(self.selected_card)
         self.selected_card = None
         self.current_player.move_status = 2
@@ -195,7 +198,7 @@ class GameScreen(Screen):
             winning_player = self.current_player
             self.deckobj.refresh_deck()
             self.reset_screen()
-            # self.manager.current = 'player_win_screen'
+
 
     def display_open_card(self):
         try:
@@ -233,6 +236,4 @@ class MainApp(App):
     def build(self):
         return RootWidget()
 
-# run the app
-if __name__== '__main__':
-    MainApp().run()
+MainApp().run()
