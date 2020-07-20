@@ -20,7 +20,7 @@ def threaded_client(conn):
     global deckobj
     conn.send(pickle.dumps(deckobj))
     deckobj = pickle.loads(conn.recv(2048))
-
+    print(len(deckobj.deck))
     while True:
         try:
             data = pickle.loads(conn.recv(2048))

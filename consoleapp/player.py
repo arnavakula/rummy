@@ -20,17 +20,14 @@ class Player:
             hand.append(self.deck[i])
         for card in hand:
             self.deck.remove(card)
-        
-        self.deck.pop(0)
-
         return hand
 
     def give_card_type(self, card):
         self.hand.append(card)
-    
+
     def give_card_attr(self, value, suit):
         self.hand.append(Card(value, suit))
-        
+
     def is_match(self, trio):
         c1, c2, c3 = trio
         if c1.value == c2.value and c2.value == c3.value:
@@ -45,12 +42,12 @@ class Player:
         v1, v2, v3 = sorted([c.value for c in trio])
 
         return True if v1 == v2 and v2 == v3 else False
-    
+
     def are_consecutive(self, trio):
         v1, v2, v3 = sorted([c.value for c in trio])
 
         return True if (v1 + 1 == v2 and v2 + 1 == v3) or (v1 == 1 and v2 == 12 and v3 == 13) else False
-    
+
     def are_same_suit(self, trio):
         s1, s2, s3 = [c.suit for c in trio]
 
@@ -66,7 +63,7 @@ class Player:
                     if self.is_match((self.hand[i], self.hand[j], self.hand[k])):
                         match_count += 1
         return match_count
-    
+
     def get_all_matches(self):
         matches = []
         for i in range(0, len(self.hand) - 2):
@@ -82,22 +79,22 @@ class Player:
         for c in self.hand:
             c.show()
         print()
-    
+
     def has_duplicates(self, matches):
         cards = []
         for match in matches:
             for card in match:
                 cards.append(card)
-        
+
         for card in cards:
             if cards.count(card) > 1:
                 return True
-        
+
         return False
 
     # sorting cards
     def sort_cards(self, hand):
-        #suit and number 
+        #suit and number
         #TODO implement multi-criteria checking
         new_hand = []
         value_sort = [[], [], [], []]
@@ -105,11 +102,11 @@ class Player:
         for card in hand:
             value_sort[constants.SUITS.index(card.suit)].append(card.value)
 
-        for suit in value_sort: 
+        for suit in value_sort:
             suit.sort()
-            for value in suit: 
+            for value in suit:
                 new_hand.append(Card(value, constants.SUITS[value_sort.index(suit)]))
-            
+
         return new_hand
 
     def won_game(self):
@@ -129,11 +126,11 @@ class Player:
                         for c in matches[k]:
                             c.show()
                         return True
-        
-        return False     
+
+        return False
 
     def add_card(self, card, pile):
-        self.hand.append(card)  
+        self.hand.append(card)
         self.sorted_hand = self.sort_cards(self.hand)
         pile.remove(card)
 
@@ -143,6 +140,3 @@ class Player:
                 if c.value == card.value and c.suit == card.suit:
                     hand.remove(c)
         self.deckobj.discard_pile.append(card)
-
-   
-
