@@ -1,10 +1,12 @@
 import socket
 import pickle
 from _thread import *
+from consoleapp.cards import *
 
 host = 'localhost'
 port = 5555
-lst = []
+
+deckobj = Deck()
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((host, port))
@@ -14,15 +16,21 @@ print('Waiting for connection...')
 s.listen()
 
 def threaded_client(conn):
+    #send initial deck
+    global deckobj
+    conn.send(pickle.dumps(deckobj))
+    deckobj = pickle.loads(conn.recv(2048))
+
     while True:
         try:
-            value, suit = pickle.loads(conn.recv(2048))
+            data = pickle.loads(conn.recv(2048))
 
             if not data:
                 print('No connection')
                 break
             else:
                 print('Received: {}'.format(data))
+                conn.send(pickle.dumps(deckobj))
         except:
             print('Lost connection')
             conn.close()
