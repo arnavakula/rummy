@@ -13,6 +13,8 @@ class Player:
         self.hand = self.get_new_hand()
         self.sorted_hand = self.sort_cards(self.hand)
         self.move_status = 0
+        self.id = 0
+        self.has_app = False
 
     def get_new_hand(self):
         hand = []

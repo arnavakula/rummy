@@ -18,23 +18,16 @@ from consoleapp.cards import *
 from consoleapp.player import *
 
 Builder.load_file('design.kv')
-winning_player = None
-net = Network()
 
-class PlayerSelectScreen(Screen):
-    pass
+net = Network()
 
 class GameScreen(Screen):
     deckobj = Deck()
-    p1, p2, p3 = Player(deckobj), Player(deckobj), Player(deckobj)
     has_clicked = False
     selected_card = None
     highlighting_card = False
-    current_player = p1
-    p1.move_status = 0
-    p2.move_status = 2
-    p3.move_status = 2
-    players = (p1, p2, p3)
+    current_player = net.player
+    players = (net.player)
 
     def get_card_fp(self, button):
         button.font_size = '0sp'

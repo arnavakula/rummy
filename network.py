@@ -2,22 +2,21 @@ import socket
 import pickle
 from consoleapp.player import Player
 
+class PlayerList():
+    def __init__(self, players):
+        self.players = players
+
 class Network:
-    def __init__(self, num):
+    def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server = 'localhost'
         self.port = 5555
         self.addr = (self.server, self.port)
-        self.players = self.connect(num)
+        self.connect()
 
-    def connect(self, num):
+    def connect(self):
         self.client.connect(self.addr)
-        self.deckobj = pickle.loads(self.client.recv(2048))
-        pl = []
-        for x in range(num):
-            pl.append(Player(self.deckobj))
-        self.client.send(pickle.dumps(self.deckobj))
-        return pl
+        self.player = pickle.loads(self.client.recv(2048))
 
     def send(self, data):
         try:
@@ -28,5 +27,3 @@ class Network:
                 print('Got nothing for data sent')
         except:
             print('Sorry, there was an error in connecting to the server.')
-
-n = Network(2)
