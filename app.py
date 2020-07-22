@@ -30,9 +30,9 @@ class GameScreen(Screen):
         self.highlighting_card = False
         self.current_player = net.player
         self.players = (net.players)
-        t = threading.Thread(target=self.receive_data)
-        t.setDaemon(True)
-        t.start()
+        self.t = threading.Thread(target=self.receive_data)
+        self.t.setDaemon(True)
+        self.t.start()
         super(Screen,self).__init__(**kwargs)
 
     def receive_data(self):
@@ -41,6 +41,11 @@ class GameScreen(Screen):
                 dobj, open_card, next_id = pickle.loads(net.client.recv(2048))
                 print('FOUND DATA FROM SERVER')
                 print(dobj, open_card, next_id)
+                if self.current_player.id == next_id:
+                    self.current_player.move_status = 0
+
+                self.deckobj = dobj
+                self.reset_screen()
             except:
                 pass
 
