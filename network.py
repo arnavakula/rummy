@@ -2,10 +2,6 @@ import socket
 import pickle
 from consoleapp.player import Player
 
-class PlayerList():
-    def __init__(self, players):
-        self.players = players
-
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -16,14 +12,15 @@ class Network:
 
     def connect(self):
         self.client.connect(self.addr)
-        self.player = pickle.loads(self.client.recv(2048))
+        with open('players.dat', 'rb') as f:
+            self.players = pickle.loads(f.read())
+        self.id = int(self.client.recv(2048).decode())
+        print(self.id)
+        self.player = self.players[self.id]
 
     def send(self, data):
-        try:
-            self.client.send(pickle.dumps(data))
-            try:
-                return pickle.loads(self.client.recv(2048))
-            except:
-                print('Got nothing for data sent')
-        except:
-            print('Sorry, there was an error in connecting to the server.')
+        self.client.send(pickle.dumps(data))
+
+n = Network()
+print(n.players)
+print(n.player)

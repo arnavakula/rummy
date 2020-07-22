@@ -69,13 +69,14 @@ class GameScreen(Screen):
             cv2.imwrite(path, pressed_img)
 
     def switch_player(self):
-        try:
-            self.current_player = self.players[self.players.index(self.current_player) + 1]
-        except IndexError:
-            self.current_player = self.players[0]
-
-        self.ids.sort.text = 'Unsort' if self.current_player.sorted else 'Sort'
-        self.reset_screen()
+        pass
+        # try:
+        #     self.current_player = self.players[self.players.index(self.current_player) + 1]
+        # except IndexError:
+        #     self.current_player = self.players[0]
+        #
+        # self.ids.sort.text = 'Unsort' if self.current_player.sorted else 'Sort'
+        # self.reset_screen()
 
     def handle_clicked_card(self, button):
         if not self.highlighting_card:
@@ -181,16 +182,17 @@ class GameScreen(Screen):
         net.send((self.selected_card.value, self.selected_card.suit))
         self.current_player.discard(self.selected_card)
         self.selected_card = None
-        self.current_player.move_status = 2
-        try:
-            self.players[self.players.index(self.current_player) + 1].move_status = 0
-        except IndexError:
-            self.players[0].move_status = 0
-        finally:
-            global winning_player
-            winning_player = self.current_player
-            self.deckobj.refresh_deck()
-            self.reset_screen()
+        self.current_player.print_hand()
+        # self.current_player.move_status = 2
+        # try:
+        #     self.players[self.players.index(self.current_player) + 1].move_status = 0
+        # except IndexError:
+        #     self.players[0].move_status = 0
+        # finally:
+        #     global winning_player
+        #     winning_player = self.current_player
+        #     self.deckobj.refresh_deck()
+        #     self.reset_screen()
 
 
     def display_open_card(self):

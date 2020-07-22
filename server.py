@@ -25,13 +25,16 @@ class PlayerList():
 #TODO except if too many players join server
 for i in range(2):
     p = Player(deckobj)
-    p.move_status == 0 if i == 1 else 2
     p.id = i
     players.append(p)
 
+with open('players.dat', 'wb') as f:
+    f.truncate(0)
+    f.write(pickle.dumps(players))
+
 def threaded_client(conn, player):
-    #send player based on id
-    conn.send(pickle.dumps(players[player]))
+    #send id
+    conn.send(str(player).encode())
 
     while True:
         try:
