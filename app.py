@@ -24,7 +24,7 @@ net = Network()
 
 class GameScreen(Screen):
     def __init__(self, **kwargs):
-        self.deckobj = Deck()
+        self.deckobj = net.deckobj
         self.has_clicked = False
         self.selected_card = None
         self.highlighting_card = False
@@ -207,7 +207,6 @@ class GameScreen(Screen):
         self.selected_card = None
         self.reset_screen()
 
-
     def display_open_card(self):
         try:
             self.ids.open_card_display.background_normal = self.deckobj.discard_pile[-1].get_image_name()
@@ -220,13 +219,10 @@ class GameScreen(Screen):
             self.ids.open_card_display.text = 'None (discard pile is empty)'
 
     def initialize_discard(self):
-        self.deckobj.discard_pile.append(self.deckobj.deck[0])
-        self.deckobj.deck.pop(0)
-        return self.deckobj.discard_pile[-1].get_image_name()
+        return net.get_open_card().get_image_name()
 
     def click_open_card(self):
         pass
-
 
 class PlayerWinScreen(Screen):
     def get_winning_message(self):

@@ -8,6 +8,9 @@ host = 'localhost'
 port = 5555
 
 deckobj = Deck()
+#initialize discard pile
+deckobj.discard_pile.append(deckobj.deck[0])
+deckobj.deck.pop(0)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((host, port))
@@ -31,7 +34,7 @@ with open('players.dat', 'wb') as f:
 
 def threaded_client(conn, player):
     #send id
-    conn.send(str(player).encode())
+    conn.send(pickle.dumps((player, deckobj)))
 
     while True:
         try:
