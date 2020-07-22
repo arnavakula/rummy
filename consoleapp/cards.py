@@ -2,13 +2,13 @@ import random
 import consoleapp.constants as constants
 
 class Card():
-    
+
     def __init__(self, value, suit):
         self.value = value
         self.translated_value = self.get_translated_value()
         self.suit = suit
         self.clicked = False
-    
+
     def get_image_name(self):
         suit = self.suit[0].upper()
         if self.value > 10 or self.value < 2:
@@ -26,7 +26,7 @@ class Card():
         else:
             fp = f'pressed_card_images//{self.value}{suit}.png'
         return fp
-    
+
     def get_translated_value(self):
         face_cards = {1: 'Ace', 11: 'Jack', 12: 'Queen', 13: 'King'}
 
@@ -47,16 +47,16 @@ class Deck():
         self.deck = self.create_new_deck()
         self.discard_pile = []
 
-    def create_new_deck(self): 
+    def create_new_deck(self):
         # create and shuffle 52-card deck, used at init
         deck = []
         for suit in constants.SUITS:
             for value in range(1, 14):
                 deck.append(Card(value, suit))
         random.shuffle(deck)
-        
+
         return deck
-    
+
     def get_open_card(self):
         try:
             return self.discard_pile[-1].get_name()
@@ -66,12 +66,8 @@ class Deck():
     def show(self):
         for c in self.deck:
             c.print_card()
-        
+
     def refresh_deck(self):
         new_cards = self.discard_pile[1:]
         del self.discard_pile[1:]
-        print(len(self.deck))
         self.deck += new_cards
-        print(len(self.deck))
-
-

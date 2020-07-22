@@ -41,7 +41,7 @@ def threaded_client(conn, player):
                 print('No connection')
                 break
             else:
-                print('Received: {}'.format(data.get_name()))
+                print('Received: ', data)
                 for c in connections:
                     c.send(pickle.dumps(data))
 

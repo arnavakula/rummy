@@ -38,9 +38,9 @@ class GameScreen(Screen):
     def receive_data(self):
         while True:
             try:
-                data = pickle.loads(net.client.recv(2048))
+                dobj, open_card, next_id = pickle.loads(net.client.recv(2048))
                 print('FOUND DATA FROM SERVER')
-                self.ids.open_card_display.background_normal = data.get_image_name()
+                print(dobj, open_card, next_id)
             except:
                 pass
 
@@ -194,17 +194,18 @@ class GameScreen(Screen):
         return self.current_player.sorted_hand if self.current_player.sorted else self.current_player.hand
 
     def discard(self):
-        net.send(self.selected_card)
         self.current_player.discard(self.selected_card)
-        self.selected_card = None
         self.current_player.move_status = 2
+        next_id = 0
         try:
-            self.players[self.players.index(self.current_player) + 1].move_status = 0
+            next_id = self.players[self.current_player.id + 1].id
         except IndexError:
-            self.players[0].move_status = 0
-        finally:
-            self.deckobj.refresh_deck()
-            self.reset_screen()
+            pass
+
+        self.deckobj.refresh_deck()
+        net.send((self.deckobj, self.selected_card, next_id))
+        self.selected_card = None
+        self.reset_screen()
 
 
     def display_open_card(self):
