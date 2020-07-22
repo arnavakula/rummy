@@ -3,6 +3,7 @@ import os
 import time
 from network import Network
 import pickle
+import threading
 
 import cv2
 from kivy.app import App
@@ -22,12 +23,26 @@ Builder.load_file('design.kv')
 net = Network()
 
 class GameScreen(Screen):
-    deckobj = Deck()
-    has_clicked = False
-    selected_card = None
-    highlighting_card = False
-    current_player = net.player
-    players = (net.player)
+    def __init__(self, **kwargs):
+        self.deckobj = Deck()
+        self.has_clicked = False
+        self.selected_card = None
+        self.highlighting_card = False
+        self.current_player = net.player
+        self.players = (net.players)
+        t = threading.Thread(target=self.receive_data)
+        t.setDaemon(True)
+        t.start()
+        super(Screen,self).__init__(**kwargs)
+
+    def receive_data(self):
+        while True:
+            try:
+                data = pickle.loads(net.client.recv(2048))
+                print('FOUND DATA FROM SERVER')
+                self.ids.open_card_display.background_normal = data.get_image_name()
+            except:
+                pass
 
     def get_card_fp(self, button):
         button.font_size = '0sp'
@@ -70,13 +85,13 @@ class GameScreen(Screen):
 
     def switch_player(self):
         pass
-        # try:
-        #     self.current_player = self.players[self.players.index(self.current_player) + 1]
-        # except IndexError:
-        #     self.current_player = self.players[0]
-        #
-        # self.ids.sort.text = 'Unsort' if self.current_player.sorted else 'Sort'
-        # self.reset_screen()
+        try:
+            self.current_player = self.players[self.players.index(self.current_player) + 1]
+        except IndexError:
+            self.current_player = self.players[0]
+
+        self.ids.sort.text = 'Unsort' if self.current_player.sorted else 'Sort'
+        self.reset_screen()
 
     def handle_clicked_card(self, button):
         if not self.highlighting_card:
@@ -179,20 +194,17 @@ class GameScreen(Screen):
         return self.current_player.sorted_hand if self.current_player.sorted else self.current_player.hand
 
     def discard(self):
-        net.send((self.selected_card.value, self.selected_card.suit))
+        net.send(self.selected_card)
         self.current_player.discard(self.selected_card)
         self.selected_card = None
-        self.current_player.print_hand()
-        # self.current_player.move_status = 2
-        # try:
-        #     self.players[self.players.index(self.current_player) + 1].move_status = 0
-        # except IndexError:
-        #     self.players[0].move_status = 0
-        # finally:
-        #     global winning_player
-        #     winning_player = self.current_player
-        #     self.deckobj.refresh_deck()
-        #     self.reset_screen()
+        self.current_player.move_status = 2
+        try:
+            self.players[self.players.index(self.current_player) + 1].move_status = 0
+        except IndexError:
+            self.players[0].move_status = 0
+        finally:
+            self.deckobj.refresh_deck()
+            self.reset_screen()
 
 
     def display_open_card(self):

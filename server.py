@@ -16,16 +16,13 @@ print('Waiting for connection...')
 
 s.listen()
 players = []
-
-class PlayerList():
-    def __init__(self, players):
-        self.players = players
-
+connections = []
 
 #TODO except if too many players join server
 for i in range(2):
     p = Player(deckobj)
     p.id = i
+    p.move_status = 0 if i == 0 else 2
     players.append(p)
 
 with open('players.dat', 'wb') as f:
@@ -44,8 +41,10 @@ def threaded_client(conn, player):
                 print('No connection')
                 break
             else:
-                print('Received: {}'.format(data))
-                # conn.send
+                print('Received: {}'.format(data.get_name()))
+                for c in connections:
+                    c.send(pickle.dumps(data))
+
         except:
             print('Lost connection')
             conn.close()
@@ -55,5 +54,6 @@ def threaded_client(conn, player):
 player = 0
 while True:
     conn, addr = s.accept()
+    connections.append(conn)
     start_new_thread(threaded_client, (conn, player))
     player += 1
