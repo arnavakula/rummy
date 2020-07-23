@@ -134,11 +134,13 @@ class Player:
     def add_card(self, card, pile):
         self.hand.append(card)
         self.sorted_hand = self.sort_cards(self.hand)
-        pile.remove(card)
+        pile.deck.remove(card)
 
-    def discard(self, card):
+    def discard(self, card, dobj):
         for hand in (self.sorted_hand, self.hand):
             for c in hand:
                 if c.value == card.value and c.suit == card.suit:
                     hand.remove(c)
-        self.deckobj.discard_pile.append(card)
+        dobj.discard_pile.append(card)
+        print('in discard of player')
+        card.show()

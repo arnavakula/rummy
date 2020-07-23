@@ -32,6 +32,10 @@ with open('players.dat', 'wb') as f:
     f.truncate(0)
     f.write(pickle.dumps(players))
 
+with open('current_deckobj.dat', 'wb') as f:
+    f.truncate(0)
+    f.write(pickle.dumps(deckobj))
+
 def threaded_client(conn, player):
     #send id
     conn.send(pickle.dumps((player, deckobj)))

@@ -39,12 +39,14 @@ class GameScreen(Screen):
         while True:
             try:
                 dobj, open_card, next_id = pickle.loads(net.client.recv(2048))
+                with open('current_deckobj.dat', 'wb') as f:
+                    f.truncate(0)
+                    f.write(pickle.dumps(dobj))
+
                 print('FOUND DATA FROM SERVER')
-                print(dobj, open_card, next_id)
                 if self.current_player.id == next_id:
                     self.current_player.move_status = 0
 
-                self.deckobj = dobj
                 self.reset_screen()
             except:
                 pass
@@ -145,18 +147,31 @@ class GameScreen(Screen):
         self.ids.title.text = f'Selected card: None'
 
     def draw_deck_card(self):
-        new_card = self.deckobj.deck[0]
-        self.current_player.add_card(new_card, self.deckobj.deck)
+        with open('current_deckobj.dat', 'rb') as f:
+            dobj = pickle.loads(f.read())
+            new_card = dobj.deck[0]
+
+        self.current_player.add_card(new_card, dobj)
         self.current_player.move_status = 1
         self.reset_screen()
         self.highlight_card(new_card)
 
+        with open('current_deckobj.dat', 'wb') as f:
+            f.write(pickle.dumps(dobj))
+
     def draw_open_card(self):
-        new_card = self.deckobj.discard_pile[-1]
-        self.current_player.add_card(new_card, self.deckobj.discard_pile)
+        with open('current_deckobj.dat', 'rb') as f:
+            dobj = pickle.loads(f.read())
+            new_card = dobj.discard_pile[-1]
+
+        self.current_player.add_card(new_card, dobj)
         self.current_player.move_status = 1
         self.reset_screen()
         self.highlight_card(new_card)
+
+        with open('current_deckobj.dat', 'wb') as f:
+            f.truncate(0)
+            f.write(pickle.dumps(dobj))
 
     def highlight_card(self, new_card):
         cid = 'c10'
@@ -173,12 +188,6 @@ class GameScreen(Screen):
     def restore_image(self, cid, card):
         self.ids[cid].background_normal = card.get_image_name()
         self.highlighting_card = False
-
-    def get_open_card(self):
-        return self.deckobj.get_open_card()
-
-    def display_open_card(self):
-        return f"Open Card: {self.deckobj.get_open_card()}"
 
     def get_init_disable(self, text):
         if self.current_player.move_status == 0 and text == 'Draw':
@@ -199,7 +208,10 @@ class GameScreen(Screen):
         return self.current_player.sorted_hand if self.current_player.sorted else self.current_player.hand
 
     def discard(self):
-        self.current_player.discard(self.selected_card)
+        with open('current_deckobj.dat', 'rb') as f:
+            dobj = pickle.loads(f.read())
+
+        self.current_player.discard(self.selected_card, dobj)
         self.current_player.move_status = 2
         next_id = 0
         try:
@@ -208,13 +220,18 @@ class GameScreen(Screen):
             pass
 
         self.deckobj.refresh_deck()
-        net.send((self.deckobj, self.selected_card, next_id))
+        net.send((dobj, self.selected_card, next_id))
         self.selected_card = None
         self.reset_screen()
 
     def display_open_card(self):
+        with open('current_deckobj.dat', 'rb') as f:
+            dobj = pickle.loads(f.read())
+
         try:
-            self.ids.open_card_display.background_normal = self.deckobj.discard_pile[-1].get_image_name()
+            self.ids.open_card_display.background_normal = dobj.discard_pile[-1].get_image_name()
+            print('in display_open_card')
+            dobj.discard_pile[-1].show()
             self.ids.open_card_display.disabled = False
             self.ids.open_card_display.text = ''
         except:
