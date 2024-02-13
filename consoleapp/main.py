@@ -32,8 +32,7 @@ while not game_over:
         # handle discard
         game.discard(player)
 
-        game_over = player.won_game()
-        if(game_over):
+        ifgame_over := player.won_game():
             print(f'{player.name}, you have won! Congratulations! Here is your winning hand:')
             player.print_hand()
             break

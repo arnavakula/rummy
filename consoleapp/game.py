@@ -20,9 +20,8 @@ class Game:
         
         while not is_valid:
             try:
-                num = int(input('Enter the number of players playing: '))
                 # TODO allow for more than two players with multiple decks
-                if num != constants.MAX_PLAYERS:
+                if (num := int(input('Enter the number of players playing: '))) != constants.MAX_PLAYERS:
                     raise UnsupportedValue()
             except ValueError:
                 print('Sorry, you must enter a number.')
