@@ -108,7 +108,7 @@ class GameScreen(Screen):
             if hand[index].clicked and self.has_clicked:
                 button.background_normal = hand[index].get_image_name()
                 self.reset_screen()
-                self.ids.title.text = f'Selected card: None'
+                self.ids.title.text = 'Selected card: None'
             elif hand[index].clicked and not self.has_clicked:
                 print('You clicked a card and it did not register')
             else:
@@ -144,7 +144,7 @@ class GameScreen(Screen):
             self.ids.sort.text = 'Unsort'
 
         self.reset_screen()
-        self.ids.title.text = f'Selected card: None'
+        self.ids.title.text = 'Selected card: None'
 
     def draw_deck_card(self):
         with open('current_deckobj.dat', 'rb') as f:
