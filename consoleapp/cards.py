@@ -1,5 +1,5 @@
-import random
 import consoleapp.constants as constants
+import secrets
 
 class Card():
 
@@ -53,7 +53,7 @@ class Deck():
         for suit in constants.SUITS:
             for value in range(1, 14):
                 deck.append(Card(value, suit))
-        random.shuffle(deck)
+        secrets.SystemRandom().shuffle(deck)
 
         return deck
 
